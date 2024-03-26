@@ -36,7 +36,7 @@ public class UserController {
         try{
             userDto = userService.findUser(userId);
         }catch(Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
