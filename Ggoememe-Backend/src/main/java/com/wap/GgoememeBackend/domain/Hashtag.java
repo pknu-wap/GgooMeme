@@ -12,7 +12,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name="hashtags")
+@Table(name = "hashtags")
 public class Hashtag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

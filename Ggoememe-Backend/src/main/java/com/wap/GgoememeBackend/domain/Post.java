@@ -26,4 +26,6 @@ public class Post {
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "hashtag_id"))
     private Set<Hashtag> hastags = new HashSet<>();
+
+    private int likes;
 }
