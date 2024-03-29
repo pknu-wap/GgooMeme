@@ -21,7 +21,7 @@ public class PostDto {
 
         return new PostDto(post.getImage(),
                 post.getHashtagNames(),
-                post.getLikes(),
+                post.getLikedUsers().size(),
                 false);
     }
 }

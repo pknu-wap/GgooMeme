@@ -20,7 +20,7 @@ public class Hashtag {
 
     private String name;
 
-    @ManyToMany(mappedBy = "hashtags")
+    @ManyToMany(mappedBy = "hashtags", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Post> posts = new HashSet<>();
 
 

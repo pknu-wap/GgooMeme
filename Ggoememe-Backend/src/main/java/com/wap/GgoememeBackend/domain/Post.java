@@ -24,19 +24,23 @@ public class Post {
     @NotNull
     private String image;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "post_hashtag",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "hashtag_id"))
     private Set<Hashtag> hashtags = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(name = "post_user",
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "post_bookmarkedUser",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<Hashtag> users = new HashSet<>();
+    private Set<Hashtag> bookmarkedUsers = new HashSet<>();
 
-    private int likes;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "post_likedUser",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<Hashtag> likedUsers = new HashSet<>();
 
     public List<String> getHashtagNames() {
         List<String> hashtagsNames = this.hashtags.stream()
