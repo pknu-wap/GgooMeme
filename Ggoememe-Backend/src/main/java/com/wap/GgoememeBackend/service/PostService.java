@@ -12,6 +12,7 @@ public class PostService {
 
 
     public PostDto findById(Long id) {
+
         return PostDto.of(post);
     }
 }

@@ -7,12 +7,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
-@Table(name="posts")
+@Table(name = "posts")
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +28,14 @@ public class Post {
     @JoinTable(name = "post_hashtag",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "hashtag_id"))
-    private Set<Hashtag> hastags = new HashSet<>();
+    private Set<Hashtag> hashtags = new HashSet<>();
 
     private int likes;
+
+    public List<String> getHashtags() {
+        List<String> hashtagsNames = this.hashtags.stream()
+                .map(Hashtag::getName)
+                .collect(Collectors.toList());
+        return hashtagsNames;
+    }
 }
