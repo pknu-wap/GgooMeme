@@ -30,9 +30,15 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "hashtag_id"))
     private Set<Hashtag> hashtags = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(name = "post_user",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<Hashtag> users = new HashSet<>();
+
     private int likes;
 
-    public List<String> getHashtags() {
+    public List<String> getHashtagNames() {
         List<String> hashtagsNames = this.hashtags.stream()
                 .map(Hashtag::getName)
                 .collect(Collectors.toList());

@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Entity
 @Getter @Setter
@@ -23,6 +26,9 @@ public class User {
     private String email;
 
     private String imageUrl;
+
+    @ManyToMany(mappedBy = "users")
+    private Set<Post> posts = new HashSet<>();
 
     @Column(nullable = false)
     private Boolean emailVerified = false;
