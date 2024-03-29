@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashSet;
@@ -14,6 +15,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
 public class User {
     @Id
@@ -29,10 +31,10 @@ public class User {
 
     private String imageUrl;
 
-    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "bookmarkedUsers", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Post> bookmarkedPosts = new HashSet<>();
 
-    @ManyToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "likedUsers", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Post> likedPosts = new HashSet<>();
 
     @Column(nullable = false)
