@@ -24,7 +24,7 @@ public class PostService {
         PostDto postDto = PostDto.of(post);
 
         //post의 유저중에 user의 id와 일치하는 user가 있는지 확인
-        Set<Hashtag> users = post.getUsers();
+        Set<Hashtag> users = post.getBookmarkedUsers();
         boolean isBookMared = users.stream().anyMatch(user -> user.getId().equals(userPrincipal.getId()));
         if(isBookMared){
             postDto.setBookmarked(true);

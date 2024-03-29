@@ -36,6 +36,7 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<Hashtag> bookmarkedUsers = new HashSet<>();
 
+    //TODO 아 Hashtag 아니고 user를 넣어야지 다 수정해야함;;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "post_likedUser",
             joinColumns = @JoinColumn(name = "post_id"),
