@@ -21,24 +21,23 @@ public class PostService {
     private UserRepository userRepository;
 
 
-    public PostDto findById(UserPrincipal userPrincipal, Long id) throws NoSuchElementException{
+    public PostDto findById(UserPrincipal userPrincipal, Long id) throws NoSuchElementException {
         Post post = postRepository.findById(id)
-                .orElseThrow(()->new NoSuchElementException("no post"));
+                .orElseThrow(() -> new NoSuchElementException("no post"));
 
         PostDto postDto = PostDto.of(post);
 
         //post의 유저중에 user의 id와 일치하는 user가 있는지 확인
         Set<User> users = post.getBookmarkedUsers();
         boolean isBookMarked = users.stream().anyMatch(user -> user.getId().equals(userPrincipal.getId()));
-        if(isBookMarked){
+        if (isBookMarked) {
             postDto.setBookmarked(true);
         }
 
         return postDto;
     }
 
-    //TODO 쿼리 개선 필요
-    public String clickBookmark(UserPrincipal userPrincipal, Long id) throws RuntimeException{
+    public String clickBookmark(UserPrincipal userPrincipal, Long id) throws RuntimeException {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("no post"));
 
@@ -46,11 +45,11 @@ public class PostService {
         User user = userRepository.findById(userPrincipal.getId())
                 .orElseThrow(() -> new RuntimeException("no user"));
         boolean isBookMarked = users.stream().anyMatch(u -> u.equals(user));
-        if(isBookMarked){
+        if (isBookMarked) {
             post.getBookmarkedUsers().remove(user);
             postRepository.save(post);
             return "remove bookmark";
-        }else{
+        } else {
             post.getBookmarkedUsers().add(user);
             postRepository.save(post);
             return "add bookmark";
