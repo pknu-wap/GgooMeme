@@ -99,7 +99,8 @@ public class SecurityConfig {
                             "/**.jpg",
                             "/**.html",
                             "/**.css",
-                            "/**.js")
+                            "/**.js",
+                            "/**")
                         .permitAll()
                     .requestMatchers("/auth/**", "/oauth2/**")
                         .permitAll()

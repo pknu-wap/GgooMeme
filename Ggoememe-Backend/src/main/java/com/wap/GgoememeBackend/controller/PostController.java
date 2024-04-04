@@ -1,7 +1,7 @@
 package com.wap.GgoememeBackend.controller;
 
 import com.wap.GgoememeBackend.payload.PostDto;
-import com.wap.GgoememeBackend.payload.PostDtos;
+import com.wap.GgoememeBackend.payload.response.post.RelatedPostResponse;
 import com.wap.GgoememeBackend.security.CurrentUser;
 import com.wap.GgoememeBackend.security.UserPrincipal;
 import com.wap.GgoememeBackend.service.PostService;
@@ -44,14 +44,14 @@ public class PostController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/post/related/{id}")
-    public ResponseEntity<?> getRelated(@PathVariable("id") Long id){
-        PostDtos postDtos;
+    @GetMapping("/post/related/{id}/{page}")
+    public ResponseEntity<?> getRelated(@PathVariable("id") Long id, @PathVariable("page") int page){
+        RelatedPostResponse relatedPostResponse;
         try {
-            postDtos = postService.getRelatedPosts(id);
+            relatedPostResponse = postService.getRelatedPosts(id, page);
         }catch (RuntimeException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
         }
-        return new ResponseEntity<>(postDtos, HttpStatus.OK);
+        return new ResponseEntity<>(relatedPostResponse, HttpStatus.OK);
     }
 }

@@ -1,11 +1,11 @@
 package com.wap.GgoememeBackend.service;
 
-import com.wap.GgoememeBackend.domain.Hashtag;
 import com.wap.GgoememeBackend.domain.Post;
 import com.wap.GgoememeBackend.domain.User;
 import com.wap.GgoememeBackend.payload.PostDto;
-import com.wap.GgoememeBackend.payload.PostDtos;
+import com.wap.GgoememeBackend.payload.response.post.RelatedPostResponse;
 import com.wap.GgoememeBackend.repository.PostRepository;
+import com.wap.GgoememeBackend.repository.QueryDSLRepository;
 import com.wap.GgoememeBackend.repository.UserRepository;
 import com.wap.GgoememeBackend.security.UserPrincipal;
 import org.springframework.stereotype.Service;
@@ -17,12 +17,13 @@ import java.util.Set;
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final QueryDSLRepository queryDSLRepository;
 
-    public PostService(PostRepository postRepository, UserRepository userRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, QueryDSLRepository queryDSLRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.queryDSLRepository = queryDSLRepository;
     }
-
 
     public PostDto findById(UserPrincipal userPrincipal, Long id) throws NoSuchElementException {
         Post post = postRepository.findById(id)
@@ -59,14 +60,10 @@ public class PostService {
         }
     }
 
-    public PostDtos getRelatedPosts(Long id) throws RuntimeException{
+    public RelatedPostResponse getRelatedPosts(Long id, int page) throws RuntimeException{
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("no post"));
 
-        Set<Hashtag> hashtags = post.getHashtags();
-        //해당 이미지의 해시태그와 같은 태그를 많이 갖고 있는 이미지 추가하기
-
-
-        return null;
+        return queryDSLRepository.pageOfRelatedPosts(post.getHashtagNames(), page);
     }
 }

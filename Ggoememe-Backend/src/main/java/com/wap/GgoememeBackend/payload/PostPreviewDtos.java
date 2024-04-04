@@ -12,15 +12,15 @@ import java.util.stream.Collectors;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostDtos {
-    private List<PostDto> postDtos;
+public class PostPreviewDtos {
+    private List<PostPreviewDto> postPreviewDtos;
 
-    public static PostDtos of(List<Post> posts){
+    public static PostPreviewDtos of(List<Post> posts){
         //리스트를 postDto의 리스트로 만들고 생성자 사용해서 반환
 
-        List<PostDto> postDtos = posts.stream()
-                .map(PostDto::of)
+        List<PostPreviewDto> postPreviewDtos = posts.stream()
+                .map(PostPreviewDto::of)
                 .collect(Collectors.toList());
-        return new PostDtos(postDtos);
+        return new PostPreviewDtos(postPreviewDtos);
     }
 }
