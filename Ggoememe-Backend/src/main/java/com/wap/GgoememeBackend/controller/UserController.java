@@ -63,5 +63,8 @@ public class UserController {
         return new ResponseEntity<>(myPageDto, HttpStatus.OK);
     }
 
+    //Get/mypage/bookmark
+    @GetMapping("/mypage/bookmark")
+    public
 }
 
