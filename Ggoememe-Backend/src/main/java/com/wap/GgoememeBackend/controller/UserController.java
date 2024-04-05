@@ -50,7 +50,6 @@ public class UserController {
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
-
     //Get/mypage/info
     @GetMapping("/mypage/info")
     public ResponseEntity<MyPageDto> getMyPageInfo(@CurrentUser UserPrincipal userPrincipal) {
@@ -63,8 +62,6 @@ public class UserController {
         return new ResponseEntity<>(myPageDto, HttpStatus.OK);
     }
 
-    //Get/mypage/bookmark
-    @GetMapping("/mypage/bookmark")
-    public
+
 }
 

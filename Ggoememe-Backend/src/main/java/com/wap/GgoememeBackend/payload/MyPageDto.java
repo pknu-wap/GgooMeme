@@ -10,12 +10,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MyPageDto {
-    String id;
+    Long id;
     String name;
     String imageUrl;
 
-    public MyPageDto(Long id, String name, String imageUrl) {
-    }
+
 
     //UserDto userDto = UserDto.of(user)
     public static MyPageDto of(User user) {
