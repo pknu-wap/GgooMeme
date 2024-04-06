@@ -3,11 +3,13 @@ package com.wap.GgoememeBackend.controller;
 import com.wap.GgoememeBackend.domain.User;
 import com.wap.GgoememeBackend.exception.ResourceNotFoundException;
 import com.wap.GgoememeBackend.payload.MyPageDto;
+import com.wap.GgoememeBackend.payload.PostPreviewDto;
 import com.wap.GgoememeBackend.payload.UserDto;
 import com.wap.GgoememeBackend.repository.UserRepository;
 import com.wap.GgoememeBackend.security.CurrentUser;
 import com.wap.GgoememeBackend.security.UserPrincipal;
 import com.wap.GgoememeBackend.service.MyPageService;
+import com.wap.GgoememeBackend.service.PostService;
 import com.wap.GgoememeBackend.service.UserService;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,10 +17,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -32,6 +38,8 @@ public class UserController {
     @Autowired
     private MyPageService myPageService;
 
+    @Autowired
+    private PostService postService;
     @GetMapping("/user/me")
     public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
         return userRepository.findById(userPrincipal.getId())
@@ -62,6 +70,11 @@ public class UserController {
         return new ResponseEntity<>(myPageDto, HttpStatus.OK);
     }
 
-
+    //Get/mypage/bookmark
+    @GetMapping("/bookmarkedPosts")
+    public ResponseEntity<Map<String, List<PostPreviewDto>>> getBookmarkedPosts(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        Map<String, List<PostPreviewDto>> bookmarkedPosts = postService.getBookmarkedPosts(userPrincipal);
+        return ResponseEntity.ok(bookmarkedPosts);
+    }
 }
 

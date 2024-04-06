@@ -3,14 +3,15 @@ package com.wap.GgoememeBackend.service;
 import com.wap.GgoememeBackend.domain.Post;
 import com.wap.GgoememeBackend.domain.User;
 import com.wap.GgoememeBackend.payload.PostDto;
+import com.wap.GgoememeBackend.payload.PostPreviewDto;
 import com.wap.GgoememeBackend.repository.PostRepository;
 import com.wap.GgoememeBackend.repository.UserRepository;
 import com.wap.GgoememeBackend.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -20,6 +21,12 @@ public class PostService {
     @Autowired
     private UserRepository userRepository;
 
+    public List<PostPreviewDto> findAllPreviews() {
+        List<Post> posts = postRepository.findAll();
+        return posts.stream()
+                .map(PostPreviewDto::of)
+                .collect(Collectors.toList());
+    }
 
     public PostDto findById(UserPrincipal userPrincipal, Long id) throws NoSuchElementException {
         Post post = postRepository.findById(id)
@@ -54,5 +61,21 @@ public class PostService {
             postRepository.save(post);
             return "add bookmark";
         }
+
+    }
+
+    public Map<String, List<PostPreviewDto>> getBookmarkedPosts(UserPrincipal userPrincipal) {
+        User user = userRepository.findById(userPrincipal.getId())
+                .orElseThrow(() -> new NoSuchElementException("No user found"));
+        Set<Post> bookmarkedPosts = user.getBookmarkedPosts();
+
+        List<PostPreviewDto> postPreviewDtos = bookmarkedPosts.stream()
+                .map(post -> new PostPreviewDto(post.getId(), post.getImage()))
+                .collect(Collectors.toList());
+
+        Map<String, List<PostPreviewDto>> PostPreviewDtos = new HashMap<>();
+        PostPreviewDtos.put("postPreviewDtos", postPreviewDtos);
+
+        return PostPreviewDtos;
     }
 }
