@@ -1,13 +1,13 @@
 package com.wap.GgoememeBackend.service;
 
 import com.wap.GgoememeBackend.domain.Post;
-import com.wap.GgoememeBackend.domain.Reply;
 import com.wap.GgoememeBackend.repository.PostRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @Service
 public class ReplyService {
@@ -17,16 +17,13 @@ public class ReplyService {
         this.postRepository = postRepository;
     }
 
-    public List<String> findByPostId(Long postId) throws RuntimeException{
+    public List<String> findByPostId(Long postId, int page) throws RuntimeException{
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NoSuchElementException("no post"));
 
-        List<Reply> replies = post.getReplies();
+        //postId기반으로 Reply를 20개씩 페이지네이션 해야 함
+        PageRequest pageRequest = PageRequest.of(page, 20, Sort.by("id").descending());
 
-        List<String> repliesTexts = replies.stream()
-                .map(r -> r.getText())
-                .collect(Collectors.toList());
-
-        return repliesTexts;
+        return null;
     }
 }

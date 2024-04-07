@@ -33,7 +33,7 @@ public class PostController {
         return new ResponseEntity<>(postDto, HttpStatus.OK);
     }
 
-    @PutMapping("/post/bookmark/{id}")
+    @PutMapping("/post/bookmark/{id}/{page}")
     public ResponseEntity<String> clickBookmark(@CurrentUser UserPrincipal userPrincipal, @PathVariable("id") Long id){
         String result;
         try {

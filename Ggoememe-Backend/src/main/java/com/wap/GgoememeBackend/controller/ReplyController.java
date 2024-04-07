@@ -19,10 +19,10 @@ public class ReplyController {
     }
 
     @GetMapping("/reply/{postId}")
-    public ResponseEntity<?> getReplies(@PathVariable("postId")Long postId){
+    public ResponseEntity<?> getReplies(@PathVariable("postId")Long postId, @PathVariable("page") int page){
         List<String> replies;
         try {
-            replies = replyService.findByPostId(postId);
+            replies = replyService.findByPostId(postId, page);
         }catch (NoSuchElementException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
         }
