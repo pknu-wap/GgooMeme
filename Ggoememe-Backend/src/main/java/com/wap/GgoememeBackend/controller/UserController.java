@@ -71,9 +71,9 @@ public class UserController {
     }
 
     //Get/mypage/bookmark
-    @GetMapping("/bookmarkedPosts")
+    @GetMapping("/mapage/bookmark")
     public ResponseEntity<Map<String, List<PostPreviewDto>>> getBookmarkedPosts(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        Map<String, List<PostPreviewDto>> bookmarkedPosts = postService.getBookmarkedPosts(userPrincipal);
+        Map<String, List<PostPreviewDto>> bookmarkedPosts = myPageService.getBookmarkedPosts(userPrincipal);
         return ResponseEntity.ok(bookmarkedPosts);
     }
 }

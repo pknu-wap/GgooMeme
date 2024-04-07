@@ -64,18 +64,5 @@ public class PostService {
 
     }
 
-    public Map<String, List<PostPreviewDto>> getBookmarkedPosts(UserPrincipal userPrincipal) {
-        User user = userRepository.findById(userPrincipal.getId())
-                .orElseThrow(() -> new NoSuchElementException("No user found"));
-        Set<Post> bookmarkedPosts = user.getBookmarkedPosts();
 
-        List<PostPreviewDto> postPreviewDtos = bookmarkedPosts.stream()
-                .map(post -> new PostPreviewDto(post.getId(), post.getImage()))
-                .collect(Collectors.toList());
-
-        Map<String, List<PostPreviewDto>> PostPreviewDtos = new HashMap<>();
-        PostPreviewDtos.put("postPreviewDtos", postPreviewDtos);
-
-        return PostPreviewDtos;
-    }
 }
