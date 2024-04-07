@@ -8,19 +8,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
-@Getter
-@Setter
+@Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostPreviewDto {
-    Long id;
-    String image;
+    private Long postId;
+    private String postImage;
 
+    public static PostPreviewDto of(Post post){
 
-    public static PostPreviewDto of(Post post) {
-        return new PostPreviewDto(post.getId(), post.getImage());
-
+        return new PostPreviewDto(post.getId(),
+                post.getImage());
     }
-
-
 }

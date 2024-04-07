@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostDto {
+    private Long postId;
     private String image;
     private List<String> hashtags;
     private int likes;
@@ -19,7 +20,8 @@ public class PostDto {
 
     public static PostDto of(Post post){
 
-        return new PostDto(post.getImage(),
+        return new PostDto(post.getId(),
+                post.getImage(),
                 post.getHashtagNames(),
                 post.getLikedUsers().size(),
                 false);
