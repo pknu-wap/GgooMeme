@@ -1,3 +1,6 @@
+INSERT INTO users(id, email, email_verified, image_url, name, password, provider, provider_id)
+VALUES(1, 'lcl8661@gmail.com', 0, 'https://lh3.googleusercontent.com/a/ACg8ocK8s0zbZgNWzw8F9MbvqZlKMGAfUjXlsnluEezFSiJ9Zn-MiBwK=s96-c', '이채린', NULL, 'google', '109253574579197183232');
+
 INSERT INTO posts(id, image)
 VALUES (1, "url"),
        (2, "url"),
@@ -9,6 +12,11 @@ VALUES (1, "url"),
        (8, "url"),
        (9, "url"),
        (10, "url");
+
+INSERT INTO post_bookmarked_user(post_id, user_id)
+VALUES(1, 1),
+      (2, 1),
+      (3, 1);
 
 INSERT INTO hashtags(id, name)
 VALUES (1, "html"),

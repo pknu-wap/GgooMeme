@@ -3,6 +3,7 @@ package com.wap.GgoememeBackend.service;
 import com.wap.GgoememeBackend.domain.Post;
 import com.wap.GgoememeBackend.domain.User;
 import com.wap.GgoememeBackend.payload.PostDto;
+import com.wap.GgoememeBackend.payload.PostPreviewDto;
 import com.wap.GgoememeBackend.payload.response.post.RelatedPostResponse;
 import com.wap.GgoememeBackend.repository.PostRepository;
 import com.wap.GgoememeBackend.repository.QueryDSLRepository;
@@ -10,8 +11,8 @@ import com.wap.GgoememeBackend.repository.UserRepository;
 import com.wap.GgoememeBackend.security.UserPrincipal;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -23,6 +24,14 @@ public class PostService {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.queryDSLRepository = queryDSLRepository;
+
+    }
+
+    public List<PostPreviewDto> findAllPreviews() {
+        List<Post> posts = postRepository.findAll();
+        return posts.stream()
+                .map(PostPreviewDto::of)
+                .collect(Collectors.toList());
     }
 
     public PostDto findById(UserPrincipal userPrincipal, Long id) throws NoSuchElementException {
@@ -58,6 +67,7 @@ public class PostService {
             postRepository.save(post);
             return "add bookmark";
         }
+
     }
 
     public RelatedPostResponse getRelatedPosts(Long id, int page) throws RuntimeException{
