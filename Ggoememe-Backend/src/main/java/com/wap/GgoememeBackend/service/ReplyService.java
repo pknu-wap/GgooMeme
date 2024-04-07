@@ -2,6 +2,7 @@ package com.wap.GgoememeBackend.service;
 
 import com.wap.GgoememeBackend.domain.Post;
 import com.wap.GgoememeBackend.domain.Reply;
+import com.wap.GgoememeBackend.payload.request.reply.ReplyRequest;
 import com.wap.GgoememeBackend.payload.response.reply.ReplyResponse;
 import com.wap.GgoememeBackend.repository.PostRepository;
 import com.wap.GgoememeBackend.repository.ReplyRepository;
@@ -36,5 +37,13 @@ public class ReplyService {
                 .collect(Collectors.toList());
 
         return new ReplyResponse(pagedReplies.hasNext(), replies);
+    }
+
+    public void writeReply(Long id, ReplyRequest req) throws RuntimeException{
+        Post post = postRepository.findById(req.getPostId())
+                .orElseThrow(() -> new NoSuchElementException());
+
+        Reply reply = new Reply(null, req.getText(), post);
+        replyRepository.save(reply);
     }
 }
