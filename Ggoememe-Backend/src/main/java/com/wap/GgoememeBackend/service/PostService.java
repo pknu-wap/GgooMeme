@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 @Service
 public class PostService {
     private final PostRepository postRepository;
@@ -83,10 +85,8 @@ public class PostService {
         return queryDSLRepository.pageOfRelatedPosts(post.getHashtagNames(), page);
     }
 
-    public MainPostResponse getMainPosts(Long id, int page) throws RuntimeException {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("no post"));
+    public MainPostResponse getMainPosts(int page) throws RuntimeException {
 
-        return mainPostRepository.pageOfMainPosts(id, page);
+        return mainPostRepository.pageOfMainPosts(page);
     }
 }

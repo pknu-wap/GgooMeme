@@ -11,12 +11,26 @@ VALUES (1, "url"),
        (7, "url"),
        (8, "url"),
        (9, "url"),
-       (10, "url");
+       (10, "url"),
+       (11, "url"),
+       (12, "url"),
+       (13, "url"),
+       (14, "url"),
+       (15, "url"),
+       (16, "url"),
+       (17, "url"),
+       (18, "url"),
+       (19, "url"),
+       (20, "url"),
+       (21, "url");
+
 
 INSERT INTO post_bookmarked_user(post_id, user_id)
 VALUES(1, 1),
       (2, 1),
-      (3, 1);
+      (5, 1),
+      (8, 1);
+
 
 INSERT INTO hashtags(id, name)
 VALUES (1, "html"),

@@ -57,10 +57,10 @@ public class PostController {
     }
 
     @GetMapping("/post/main/{page}")
-    public ResponseEntity<?> getMainPosts(@PathVariable("id") Long id, @PathVariable("page") int page){
+    public ResponseEntity<?> getMainPosts(@PathVariable("page") int page){
         MainPostResponse mainPostResponse;
         try {
-            mainPostResponse = postService.getMainPosts(id, page);
+            mainPostResponse = postService.getMainPosts(page);
         }catch (RuntimeException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
         }

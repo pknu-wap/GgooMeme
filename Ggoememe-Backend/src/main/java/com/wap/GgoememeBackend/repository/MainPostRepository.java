@@ -5,13 +5,14 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wap.GgoememeBackend.domain.Post;
+import com.wap.GgoememeBackend.domain.User;
 import com.wap.GgoememeBackend.payload.PostPreviewDtos;
 import com.wap.GgoememeBackend.payload.response.post.MainPostResponse;
-import com.wap.GgoememeBackend.payload.response.post.RelatedPostResponse;
 import jakarta.persistence.EntityManager;
 import lombok.Getter;
 import org.springframework.stereotype.Repository;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.wap.GgoememeBackend.domain.QPost.post;
@@ -26,7 +27,7 @@ public class MainPostRepository {
         this.query = new JPAQueryFactory(em);
     }
 
-    public MainPostResponse pageOfMainPosts(Long id, int page) {
+    public MainPostResponse pageOfMainPosts(int page) {
         NumberPath<Long> bookmarkedUsersCount = Expressions.numberPath(Long.class, "bookmarkedUsers");
 
         List<Tuple> result = query
@@ -48,6 +49,6 @@ public class MainPostRepository {
 
         PostPreviewDtos postPreviewDtos = PostPreviewDtos.of(posts);
 
-        return new RelatedPostResponse(hasNext, postPreviewDtos);
+        return new MainPostResponse(hasNext, postPreviewDtos);
     }
 }
