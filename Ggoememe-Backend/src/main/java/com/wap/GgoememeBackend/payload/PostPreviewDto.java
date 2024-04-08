@@ -1,5 +1,7 @@
 package com.wap.GgoememeBackend.payload;
 
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
 import com.wap.GgoememeBackend.domain.Post;
 import com.wap.GgoememeBackend.domain.User;
 import lombok.AllArgsConstructor;
@@ -14,6 +16,7 @@ import lombok.Setter;
 public class PostPreviewDto {
     private Long postId;
     private String postImage;
+
 
     public static PostPreviewDto of(Post post){
 
