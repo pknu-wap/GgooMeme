@@ -5,6 +5,9 @@ import com.wap.GgoememeBackend.payload.response.reply.ReplyResponse;
 import com.wap.GgoememeBackend.security.CurrentUser;
 import com.wap.GgoememeBackend.security.UserPrincipal;
 import com.wap.GgoememeBackend.service.ReplyService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,7 @@ public class ReplyController {
         this.replyService = replyService;
     }
 
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = ReplyResponse.class)))
     @GetMapping("/reply/{postId}/{page}")
     public ResponseEntity<?> getReplies(@PathVariable("postId")Long postId, @PathVariable("page") int page){
         ReplyResponse replies;
@@ -30,6 +34,7 @@ public class ReplyController {
         return new ResponseEntity<>(replies, HttpStatus.OK);
     }
 
+    @ApiResponse(responseCode = "200", description = "success write reply")
     @PostMapping("/reply")
     public ResponseEntity<?> writeReply(@CurrentUser UserPrincipal userPrincipal, @RequestBody ReplyRequest replyRequest){
         if(userPrincipal.isEnabled()){
