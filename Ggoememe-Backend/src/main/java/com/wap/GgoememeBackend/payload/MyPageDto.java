@@ -1,6 +1,5 @@
 package com.wap.GgoememeBackend.payload;
 
-
 import com.wap.GgoememeBackend.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,20 +9,17 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class MyPageDto {
+    Long id;
     String name;
-    String email;
+    String imageUrl;
 
 
 
     //UserDto userDto = UserDto.of(user)
-    public static UserDto of(User user) {
-        return new UserDto(user.getName(), user.getEmail());
+    public static MyPageDto of(User user) {
+        return new MyPageDto(user.getId(), user.getName(), user.getImageUrl());
     }
 
 
 }
-
-
-
-
