@@ -1,7 +1,5 @@
 package com.wap.GgoememeBackend.controller;
 
-import com.wap.GgoememeBackend.domain.User;
-import com.wap.GgoememeBackend.exception.ResourceNotFoundException;
 import com.wap.GgoememeBackend.payload.MyPageDto;
 import com.wap.GgoememeBackend.payload.PostPreviewDtos;
 import com.wap.GgoememeBackend.payload.UserDto;
@@ -35,12 +33,6 @@ public class UserController {
 
     @Autowired
     private PostService postService;
-
-    @GetMapping("/user/me")
-    public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
-        return userRepository.findById(userPrincipal.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
-    }
 
     //GET /user/{userId}
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = UserDto.class)))
