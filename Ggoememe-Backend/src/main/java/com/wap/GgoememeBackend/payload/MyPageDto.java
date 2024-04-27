@@ -11,6 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class MyPageDto {
     Long id;
+    String email;
     String name;
     String imageUrl;
 
@@ -18,7 +19,7 @@ public class MyPageDto {
 
     //UserDto userDto = UserDto.of(user)
     public static MyPageDto of(User user) {
-        return new MyPageDto(user.getId(), user.getName(), user.getImageUrl());
+        return new MyPageDto(user.getId(), user.getEmail(), user.getName(), user.getImageUrl());
     }
 
 
