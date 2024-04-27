@@ -1,6 +1,7 @@
 package com.wap.GgoememeBackend.controller;
 
 import com.wap.GgoememeBackend.payload.PostDto;
+import com.wap.GgoememeBackend.payload.response.post.MainPostResponse;
 import com.wap.GgoememeBackend.payload.response.post.RelatedPostResponse;
 import com.wap.GgoememeBackend.security.CurrentUser;
 import com.wap.GgoememeBackend.security.UserPrincipal;
@@ -33,7 +34,7 @@ public class PostController {
         return new ResponseEntity<>(postDto, HttpStatus.OK);
     }
 
-    @PutMapping("/post/bookmark/{id}")
+    @PutMapping("/post/bookmark/{id}/{page}")
     public ResponseEntity<String> clickBookmark(@CurrentUser UserPrincipal userPrincipal, @PathVariable("id") Long id){
         String result;
         try {
@@ -53,5 +54,16 @@ public class PostController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<>(relatedPostResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/post/main/{page}")
+    public ResponseEntity<?> getMainPosts(@PathVariable("page") int page){
+        MainPostResponse mainPostResponse;
+        try {
+            mainPostResponse = postService.getMainPosts(page);
+        }catch (RuntimeException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(mainPostResponse, HttpStatus.OK);
     }
 }

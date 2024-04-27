@@ -4,26 +4,34 @@ import com.wap.GgoememeBackend.domain.Post;
 import com.wap.GgoememeBackend.domain.User;
 import com.wap.GgoememeBackend.payload.PostDto;
 import com.wap.GgoememeBackend.payload.PostPreviewDto;
+import com.wap.GgoememeBackend.payload.response.post.MainPostResponse;
 import com.wap.GgoememeBackend.payload.response.post.RelatedPostResponse;
+import com.wap.GgoememeBackend.repository.MainPostRepository;
 import com.wap.GgoememeBackend.repository.PostRepository;
 import com.wap.GgoememeBackend.repository.QueryDSLRepository;
 import com.wap.GgoememeBackend.repository.UserRepository;
 import com.wap.GgoememeBackend.security.UserPrincipal;
+import lombok.Getter;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Service
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final QueryDSLRepository queryDSLRepository;
+    @Getter
+    private final MainPostRepository mainPostRepository;
 
-    public PostService(PostRepository postRepository, UserRepository userRepository, QueryDSLRepository queryDSLRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, QueryDSLRepository queryDSLRepository, MainPostRepository mainPostRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.queryDSLRepository = queryDSLRepository;
+        this.mainPostRepository = mainPostRepository;
 
     }
 
@@ -70,10 +78,15 @@ public class PostService {
 
     }
 
-    public RelatedPostResponse getRelatedPosts(Long id, int page) throws RuntimeException{
+    public RelatedPostResponse getRelatedPosts(Long id, int page) throws RuntimeException {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("no post"));
 
         return queryDSLRepository.pageOfRelatedPosts(post.getHashtagNames(), page);
+    }
+
+    public MainPostResponse getMainPosts(int page) throws RuntimeException {
+
+        return mainPostRepository.pageOfMainPosts(page);
     }
 }
