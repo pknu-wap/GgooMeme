@@ -1,0 +1,94 @@
+.app-header {
+    display:flex;
+    width:100%;
+    height: 60px;
+    position: fixed;
+    z-index: 10;
+    background-color: rgb(237,245,254);
+    /* justify-content: space-around; */
+}
+
+.app-title {
+    line-height: 60px;
+    vertical-align: middle;
+    font-size: 1.52em;
+    color: rgba(9, 52, 143, 0.65);
+    font-weight:600;
+    padding-left:20px;
+}
+
+.app-branding {
+    float:left;
+}
+
+.app-options {
+    display: flex; 
+    justify-content: flex-end; 
+}
+
+.app-nav ul {
+    list-style-position: none;
+    margin: 0;
+    padding: 0;
+    
+}
+
+.app-nav ul li {
+    list-style-type: none;
+    display: inline-block;
+}
+
+.app-nav ul li a {
+    display: inline-block;
+    line-height: 60px;
+    vertical-align: middle;
+    padding-left: 5px;
+    padding-right: 15px;
+    color: rgba(0,0,0,0.65);
+}
+
+.app-nav ul li a:hover {
+    color: #2890da;
+}
+
+.app-nav ul li a.active {
+    color: #2890da;
+}
+
+.app-container{
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 15px; 
+}
+
+.topbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    justify-content: flex-end;
+}
+
+.topbar .searching-topbar{
+    flex: 1;
+    /* options의 float:right 지우면 flex 1 적용됨 */
+    min-width: 200px;
+    height: 34px;
+    margin: 0 30px;
+    border-radius: 20px;
+    border: 1px solid transparent;
+    padding: 10px;
+}
+
+
+.topbar .searching-topbar:hover, .topbar .searching-topbar:focus, .topbar .searching-topbar:active {
+    border-color: #40a9ff;
+    outline: 0;
+    border-right-width: 1px!important;
+  }
+
+@media (max-width: 668px) {
+    .searching-topbar {
+      display: none;
+    }
+  }
+
