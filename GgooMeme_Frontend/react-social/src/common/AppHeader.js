@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link, NavLink } from "react-router-dom";
 import "./AppHeader.css";
+import { getCurrentUser } from "../util/APIUtils";
 
 class AppHeader extends Component {
   constructor(props) {
