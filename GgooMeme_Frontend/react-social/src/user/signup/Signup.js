@@ -10,13 +10,13 @@ import Alert from 'react-s-alert';
 
 class Signup extends Component {
     render() {
-        if(this.props.authenticated) {
-            return <Redirect
-                to={{
-                pathname: "/",
-                state: { from: this.props.location }
-            }}/>;            
-        }
+        // if(this.props.authenticated) {
+        //     return <Redirect
+        //         to={{
+        //         pathname: "/",
+        //         state: { from: this.props.location }
+        //     }}/>;            
+        // }
 
         return (
             <div className="signup-container">
