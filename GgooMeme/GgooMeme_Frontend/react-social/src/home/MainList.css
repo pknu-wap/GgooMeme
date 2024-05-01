@@ -1,51 +1,33 @@
-/* img {
-    overflow: hidden; /* 가로 세로 모두 오버플로우를 숨김 
-} */
-
 *{
-    box-sizing: border-box;
-    padding:0;
     margin:0;
+    padding:0;
 }
 .gallery-container {
     padding: 5px 35px;
-    text-align:center;
-    /* align-items:center;
-    justify-content:center; */
+    text-align: center;
 }
 
 .gallery {
-    display:flex;
-    gap: 20px; /* 세로간격 20px */
-    flex-wrap: wrap;
-    padding: 10px;
-    justify-content: center;
+    display: flex;
+    /* justify-content: center; */
+    align-items:flex-start;
 }
 
-.gallery-item{
+.gallery-column {
+    margin: 0 20px; /* 각 열 사이의 간격 조절 */
+}
+
+.gallery-item {
     list-style-type: none;
-    width: calc(20% - 20px);
-    margin-bottom: 20px;
+    margin-bottom: 20px; /* 각 아이템 사이의 간격 조절 */
 }
 
 .gallery-item img {
-    padding: 10px;
     width: 100%;
     height: auto;
-    border-radius: 20px; /* 이미지에 모서리를 둥글게 만듦 */
-}
-
-@media screen and (max-width: 968px) {
-    .gallery-item {
-        width: calc(33.33% - 20px); /* 화면이 작을 때는 한 줄에 3개의 이미지가 보이도록 조정 */
-    }
-}
-
-/* 480px 이하에서 적용될 스타일 */
-@media screen and (max-width: 580px) {
-    .gallery-item {
-        width: calc(50% - 20px); /* 화면이 아주 작을 때는 한 줄에 1개의 이미지만 보이도록 조정 */
-    }
+    border-radius: 20px;
+    object-fit: cover;
+    padding: 10px;
 }
 
 .load-more, .load-back{
