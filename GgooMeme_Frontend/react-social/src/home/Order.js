@@ -6,7 +6,7 @@ class Order extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOption: "편집순",
+      selectedOption: "랜덤순",
       isExpanded: false,
     };
   }
@@ -42,11 +42,14 @@ class Order extends Component {
           <div className="dropdown-detail">
             {this.state.isExpanded && (
               <div className="dropdown-detail-menu">
-                <div className="dropdown-detail-item" onClick={() => this.handleItemClick("편집순")}>
-                  <label>편집순</label>
+                <div className="dropdown-detail-item" onClick={() => this.handleItemClick("랜덤순")}>
+                  <label>랜덤순</label>
                 </div>
                 <div className="dropdown-detail-item" onClick={() => this.handleItemClick("인기순")}>
                   <label>인기순</label>
+                </div>
+                <div className="dropdown-detail-item" onClick={() => this.handleItemClick("리뷰순")}>
+                  <label>리뷰순</label>
                 </div>
               </div>
             )}
