@@ -1,36 +1,46 @@
-/* img {
-    overflow: hidden; /* 가로 세로 모두 오버플로우를 숨김 
-} */
-
 *{
-    padding:0;
     margin:0;
+    padding:0;
 }
 .gallery-container {
     padding: 5px 35px;
-    text-align:center;
-    /* align-items:center;
-    justify-content:center; */
+    text-align: center;
 }
 
 .gallery {
-    display:flex;
-    gap: 20px 2%; /* 세로간격 20px */
-    flex-wrap: wrap;
-    padding: 10px;
+    display: flex;
+    /* justify-content: center; */
+    align-items:flex-start;
 }
 
-.gallery-item{
+.gallery-column {
+    margin: 0 20px; /* 각 열 사이의 간격 조절 */
+}
+
+.gallery-item {
     list-style-type: none;
-    margin: 20px;
-    width: 20%;
+    margin-bottom: 20px; /* 각 아이템 사이의 간격 조절 */
+}
+
+.gallery-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+    object-fit: cover;
+    padding: 10px;
 }
 
 .load-more, .load-back{
     text-align:center;
-    background-color: aliceblue;
-    border: solid 1px rgba(0, 0, 0, 0.27);
+    border: none;
+    background-color: #6fbdf1;
+    color: #fff;
     border-radius: 5px;
-    padding: 4px 10px;
+    padding: 5px 10px;
     margin : 40px;
+    cursor: pointer;
+}
+
+.load-more:hover, .load-back:hover {
+    background-color: #2980b9; /* 마우스를 올렸을 때 버튼의 배경색을 변경 */
 }

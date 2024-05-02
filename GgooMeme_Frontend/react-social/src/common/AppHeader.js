@@ -41,9 +41,9 @@ class AppHeader extends Component {
                     <li>
                       <NavLink to="/login">Login</NavLink>
                     </li>
-                    <li>
+                    {/* <li>
                       <NavLink to="/signup">Signup</NavLink>
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
                 //   <div className="topbar">
