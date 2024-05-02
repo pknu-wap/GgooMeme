@@ -9,8 +9,9 @@ class AppHeader extends Component {
     console.log(props);
   }
   render() {
+    const { authenticated } = this.props;
     const currentPath = window.location.pathname;
-    
+
     return (
       <header className="app-header">
         <div className="app-container">
@@ -21,13 +22,15 @@ class AppHeader extends Component {
           </div>
           <div className="app-optionss">
             <nav className="app-nav">
-              {(this.props.authenticated) && (currentPath !== "/") ? (
+              {authenticated ? (
                 <div className="topbar">
-                  <input
-                    className="searching-topbar"
-                    type="text"
-                    placeholder="search"
-                  />
+                  {currentPath !== "/" && (
+                    <input
+                      className="searching-topbar"
+                      type="text"
+                      placeholder="search"
+                    />
+                  )}
                   <ul>
                     <li>
                       <NavLink to="/profile">Mypage</NavLink>
