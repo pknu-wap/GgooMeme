@@ -97,12 +97,12 @@ class App extends Component {
                 <Login authenticated={this.state.authenticated} {...props} />
               )}
             ></Route>
-            <Route
+            {/* <Route
               path="/signup"
               render={(props) => (
                 <Signup authenticated={this.state.authenticated} {...props} />
               )}
-            ></Route>
+            ></Route> */}
             <Route
               path="/oauth2/redirect"
               component={OAuth2RedirectHandler}
