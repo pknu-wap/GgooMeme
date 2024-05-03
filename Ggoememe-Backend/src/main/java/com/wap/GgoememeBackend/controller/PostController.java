@@ -3,6 +3,7 @@ package com.wap.GgoememeBackend.controller;
 import com.wap.GgoememeBackend.payload.PostDto;
 import com.wap.GgoememeBackend.payload.response.post.MainPostResponse;
 import com.wap.GgoememeBackend.payload.response.post.RelatedPostResponse;
+import com.wap.GgoememeBackend.payload.response.post.SearchPostResponse;
 import com.wap.GgoememeBackend.security.CurrentUser;
 import com.wap.GgoememeBackend.security.UserPrincipal;
 import com.wap.GgoememeBackend.service.PostService;
@@ -72,5 +73,17 @@ public class PostController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<>(mainPostResponse, HttpStatus.OK);
+    }
+
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = SearchPostResponse.class)))
+    @GetMapping("/post/search/{hashtag}/{page}")
+    public ResponseEntity<?> searchPosts(@PathVariable("hashtag") String hashtag, @PathVariable("page") int page){
+        SearchPostResponse searchPostResponse;
+        try {
+            searchPostResponse = postService.searchPosts(hashtag, page);
+        }catch (RuntimeException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(searchPostResponse, HttpStatus.OK);
     }
 }
