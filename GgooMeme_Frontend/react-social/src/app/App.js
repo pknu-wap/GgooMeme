@@ -71,11 +71,11 @@ class App extends Component {
     // if (accessToken) {
     //   this.state.authenticated = true;
     // }
-    
+
     //리다이렉션 1번 & null값 수정
     const accessToken = localStorage.getItem(ACCESS_TOKEN);
     if (accessToken) {
-      this.setState({ authenticated: true });
+      this.state.authenticated = true;
     }
 
     return (
