@@ -36,7 +36,7 @@
     max-width: 820px;
     display:flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;/*flex-start에서 center로 바꿈*/
     padding-top:20px;
 }
 
@@ -46,7 +46,7 @@
     font-size: 38px;
     font-weight: 900;
     color: rgba(0,0,0,0.70);
-    margin-bottom:6px;
+    margin-bottom:10px;
     margin-top: 45px;
 }
 
@@ -101,3 +101,116 @@
     color: black;
   }
 
+/*mainlist*/
+
+  *{
+    margin:0;
+    padding:0;
+}
+.gallery-container {
+    padding: 5px 15px;
+    text-align: center;
+}
+
+.gallery {
+    display: flex;
+    justify-content: center;
+    padding-top:20px;
+    /* align-items:flex-start; */
+}
+
+.gallery-column {
+    margin: 0 20px; /* 각 열 사이의 간격 조절 */
+}
+
+.gallery-item {
+    list-style-type: none;
+    margin-bottom: 20px; /* 각 아이템 사이의 간격 조절 */
+}
+
+.gallery-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    object-fit: cover;
+    /* padding: 5px; */
+}
+
+.load-more, .load-back{
+    text-align:center;
+    border: none;
+    background-color: #6fbdf1;
+    color: #fff;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin : 40px;
+    cursor: pointer;
+}
+
+.load-more:hover, .load-back:hover {
+    background-color: #2980b9; /* 마우스를 올렸을 때 버튼의 배경색을 변경 */
+}
+
+/*order*/
+
+.order-container {
+  position: relative;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 0 32px;
+}
+
+.dropdown-container{
+display: inline-flex;
+overflow: visible;
+position: relative;
+text-align: left;
+}
+
+.dropdown{
+  border-radius: 24px;
+  padding: 14px;
+  background-color: rgb(237,245,254);
+  /* border: 1px solid rgb(182, 179, 179); */
+  border:transparent;
+  cursor:pointer;
+}
+
+.dropdown-button {
+margin-right: 5px;
+align-items:center;
+}
+
+.dropdown-detail{
+top: calc(100% + 4px);
+right:0;
+position: absolute;
+min-width: 160px;
+z-index: 90;
+}
+
+.dropdown-detail-menu{
+display:flex;
+flex-direction: column;
+padding:8px;
+border-radius: 8px;
+box-shadow: 0 0 0 1px rgba(14,19,24,.07), 0 2px 18px rgba(14,19,24,.25);
+background-color: rgb(237,245,254);
+}
+
+.dropdown-detail-item{
+padding: 8px 12px;
+cursor:pointer;
+align-items:center;
+}
+
+.dropdown-detail-item label{
+cursor:pointer;
+}
+
+.dropdown-detail-item:active, .dropdown-detail-item:hover{
+color: #2890da;
+}
