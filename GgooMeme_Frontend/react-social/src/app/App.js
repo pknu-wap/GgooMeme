@@ -32,20 +32,34 @@ class App extends Component {
     this.handleLogout = this.handleLogout.bind(this);
   }
 
-  loadCurrentlyLoggedInUser() {
-    getCurrentUser()
-      .then((response) => {
-        this.setState({
-          currentUser: response,
-          authenticated: true,
-          loading: false,
-        });
-      })
-      .catch((error) => {
-        this.setState({
-          loading: false,
-        });
+  // loadCurrentlyLoggedInUser() {
+  //   getCurrentUser()
+  //     .then((response) => {
+  //       this.setState({
+  //         currentUser: response,
+  //         authenticated: true,
+  //         loading: false,
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       this.setState({
+  //         loading: false,
+  //       });
+  //     });
+  // }
+  async loadCurrentlyLoggedInUser() {
+    try {
+      const response = await getCurrentUser();
+      this.setState({
+        currentUser: response,
+        authenticated: true,
+        loading: false,
       });
+    } catch (error) {
+      this.setState({
+        loading: false,
+      });
+    }
   }
 
   handleLogout() {
