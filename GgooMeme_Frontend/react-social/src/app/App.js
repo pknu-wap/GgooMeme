@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import AppHeader from "../common/AppHeader";
 import Home from "../home/Home";
+import DetailPage from '../detail/DetailPage';
 import Login from "../user/login/Login";
 import Profile from "../user/profile/Profile";
 import OAuth2RedirectHandler from "../user/oauth2/OAuth2RedirectHandler";
@@ -47,6 +48,7 @@ class App extends Component {
   async loadCurrentlyLoggedInUser() {
     try {
       const response = await getCurrentUser();
+      localStorage.setItem(ACCESS_TOKEN, response.accessToken); // 사용자 정보를 로컬 스토리지에 저장
       this.setState({
         currentUser: response,
         authenticated: true,
@@ -92,10 +94,9 @@ class App extends Component {
           />
         </div>
         <div className="app-body">
-          <Route exact path="/" component={Home}></Route>
-          {/* <Route exact path="/" component={Order}></Route> */}
-         
           <Switch>
+            <Route exact path="/" component={Home}></Route>
+            <Route exact path="/detail/:postId" component={DetailPage}></Route>
             <PrivateRoute
               path="/profile"
               authenticated={this.state.authenticated}
@@ -112,7 +113,7 @@ class App extends Component {
               path="/oauth2/redirect"
               component={OAuth2RedirectHandler}
             ></Route>
-            {/* <Route component={NotFound}></Route> */}
+            <Route component={NotFound}></Route>
           </Switch>
         </div>
         <Alert

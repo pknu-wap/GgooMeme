@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import { request } from "../util/APIUtils";
 import { API_BASE_URL, ACCESS_TOKEN } from "../constants";
-import "./Home.css"
+import "./Home.css";
 import pencilLogo from "../../src/img/pencil.png";
+import { Link } from "react-router-dom";
 
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      hashtags: "",
+      hashtag: "",
       postPreviewDtos: [],
       hasNext: false,
       loading: true,
@@ -22,8 +23,10 @@ class Home extends Component {
 
   componentDidMount() {
     const { page } = this.state;
+    const { hashtag } = this.state;
     this.fetchPostData(page);
-
+    //this.fetchData(page,hashtag)
+    this.fetchImagesByHashtags(hashtag, page);
     window.addEventListener("resize", this.handleResize);
   }
 
@@ -56,8 +59,8 @@ class Home extends Component {
     }
   };
 
+  //이미지 정보 가져오기
   fetchPostData(page) {
-    const { hashtags } = this.state;
     request({
       url: API_BASE_URL + `/post/main/${page}`,
       method: "GET",
@@ -80,11 +83,60 @@ class Home extends Component {
       });
   }
 
-  handleInputChange = (event) => {
-    const { value } = event.target;
-    this.setState({ hashtags: value });
+  fetchImagesByHashtags = (hashtag, page) => {
+    request({
+      url: API_BASE_URL + `/post/search/${hashtag}/${page + 1}`,
+      method: "GET",
+    })
+      .then((data) => {
+        console.log("Received images:", data);
+        this.setState({
+          postPreviewDtos: data.postDtos.postPreviewDtos,
+          hasNext: data.hasNext,
+          loading: false,
+          error: null,
+          page: page,
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          loading: false,
+          error: error.message,
+        });
+      });
   };
 
+  // fetchData(page, hashtag) {
+  //   Promise.all([
+  //     request({
+  //       url: API_BASE_URL + `/post/main/${page}`,
+  //       method: "GET",
+  //     }),
+  //     request({
+  //       url: API_BASE_URL + `/post/search/${hashtag}/${page+1}`,
+  //       method: "GET",
+  //     })
+  //   ])
+  //   .then(([postData, hashtagData]) => {
+  //     console.log("Received data:", postData);
+  //     console.log("Received images:", hashtagData);
+  //     this.setState({
+  //       postPreviewDtos: postData.postDtos.postPreviewDtos,
+  //       hasNext: postData.hasNext,
+  //       loading: false,
+  //       error: null,
+  //       page: page,
+  //     });
+  //   })
+  //   .catch(error => {
+  //     this.setState({
+  //       loading: false,
+  //       error: error.message,
+  //     });
+  //   });
+  // }
+
+  //드롭메뉴
   handleItemClick = (label) => {
     this.setState({
       selectedOption: label,
@@ -99,6 +151,41 @@ class Home extends Component {
     }));
   };
 
+  //input 검색시 (endter키/ onchange)
+  handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      this.handleSearch();
+    }
+  };
+
+  handleSearch = () => {
+    const { hashtag, page } = this.state; // 현재 페이지 상태를 가져옴
+    this.fetchImagesByHashtags(hashtag, page); // 현재 페이지를 검색 API 호출에 전달
+    //this.fetchData(page,hashtag);
+  };
+
+  handleInputChange = (event) => {
+    const { value } = event.target;
+    this.setState({ hashtags: value, page: 0 }, () => {
+      // 검색어가 변경될 때 페이지를 0으로 초기화
+      this.fetchImagesByHashtags(value, 0); // 페이지를 0으로 초기화하여 검색 API 호출
+    });
+  };
+
+  handleTagClick = (tag) => {
+    this.setState({ hashtag: tag, page: 0 }, () => {
+      this.fetchImagesByHashtags(tag, 0);
+    });
+  };
+
+  // 이미지 클릭 시 상세 페이지로 이동하는 함수
+  handleImageClick = (postId) => {
+    // postId를 사용하여 상세 페이지 URL을 생성
+    const detailPageURL = `/detail/${postId}`;
+    // 상세 페이지 URL로 이동
+    this.props.history.push(detailPageURL);
+  };
+
   render() {
     const {
       postPreviewDtos,
@@ -109,36 +196,41 @@ class Home extends Component {
       columns,
       selectedOption,
       isExpanded,
-      hashtags,
+      hashtag,
     } = this.state;
 
     if (loading) {
       return <div>Loading...</div>;
     }
-    if (error) {
-      return <div>Error: {error}</div>;
-    }
+    //test를 위해 잠시 주석 표시
+    // if (error) {
+    //   return <div>Error: {error}</div>;
+    // }
 
     const columnElements = Array.from({ length: columns }, () => []);
 
     postPreviewDtos.forEach((post, index) => {
       const columnIndex = index % columns;
       columnElements[columnIndex].push(
-        <div key={post.postId} className="gallery-item">
+        <div
+          key={post.postId}
+          className="gallery-item"
+          onClick={() => this.handleImageClick(post.postId)}
+        >
           <img src={post.postImage} alt={`Post ${post.postId}`} />
         </div>
       );
     });
 
     // 페이지 번호 목록 생성
-    const pageNumbers = [];
-    for (let i = 0; i <= page; i++) {
-      pageNumbers.push(
-        <button key={i} onClick={() => this.fetchPostData(i)}>
-          {i + 1}
-        </button>
-      );
-    }
+    // const pageNumbers = [];
+    // for (let i = 0; i <= page; i++) {
+    //   pageNumbers.push(
+    //     <button key={i} onClick={() => this.fetchPostData(i)}>
+    //       {i + 1}
+    //     </button>
+    //   );
+    // }
 
     return (
       <div className="homei-container">
@@ -156,35 +248,40 @@ class Home extends Component {
               className="home-input"
               placeholder=" search"
               onChange={this.handleInputChange}
-              value={hashtags}
+              //value={hashtag}
+              onKeyDown={this.handleKeyPress}
             ></input>
             <div className="tag-out-container">
               <div className="tag-container">
-                {/* a를 link로 변경??? */}
-                <div className="tag-box" onClick={this.handleInputChange}>
-                  <a className="tag-name" href="">
-                    <span>html</span>
-                  </a>
+                <div
+                  className="tag-box"
+                  onClick={() => this.handleTagClick("html")}
+                >
+                  <a className="tag-name"><span>html</span></a>
                 </div>
-                <div className="tag-box" onClick={this.handleInputChange}>
-                  <a className="tag-name" href="">
-                    <span>CSS</span>
-                  </a>
+                <div
+                  className="tag-box"
+                  onClick={() => this.handleTagClick("CSS")}
+                >
+                  <a className="tag-name"><span>CSS</span></a>
                 </div>
-                <div className="tag-box">
-                  <a className="tag-name" href="">
-                    <span>일러스트</span>
-                  </a>
+                <div
+                  className="tag-box"
+                  onClick={() => this.handleTagClick("")}
+                >
+                  <a className="tag-name"><span>일러스트</span></a>
                 </div>
-                <div className="tag-box">
-                  <a className="tag-name" href="">
-                    <span>아이콘</span>
-                  </a>
+                <div
+                  className="tag-box"
+                  onClick={() => this.handleTagClick("")}
+                >
+                  <a className="tag-name"><span>icon</span></a>
                 </div>
-                <div className="tag-box">
-                  <a className="tag-name" href="">
-                    <span>캐리커쳐</span>
-                  </a>
+                <div
+                  className="tag-box"
+                  onClick={() => this.handleTagClick("")}
+                >
+                  <a className="tag-name"><span>캐리커쳐</span></a>
                 </div>
               </div>
             </div>
@@ -244,8 +341,22 @@ class Home extends Component {
 
           {/* 페이지 네이션 */}
           <div className="pagination">
-            {hasNext && (
-              <button onClick={() => this.fetchPostData(pageNumbers)}>{pageNumbers}</button>
+            {hasNext && page === 0 && (
+              <button
+                className="load-more"
+                onClick={() => this.fetchPostData(page + 1)}
+              >
+                {/* 다음페이지 */}
+                <Link to={`/`}>다음페이지</Link>
+              </button>
+            )}
+            {!hasNext && page > 0 && (
+              <button
+                className="load-back"
+                onClick={() => this.fetchPostData(page - 1)}
+              >
+                <Link to={`/`}>이전페이지</Link>
+              </button>
             )}
           </div>
         </div>
