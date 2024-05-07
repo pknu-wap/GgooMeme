@@ -2,10 +2,7 @@ import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import AppHeader from "../common/AppHeader";
 import Home from "../home/Home";
-import Order from "../home/Order";
-import MainList from "../home/MainList";
 import Login from "../user/login/Login";
-import Signup from "../user/signup/Signup";
 import Profile from "../user/profile/Profile";
 import OAuth2RedirectHandler from "../user/oauth2/OAuth2RedirectHandler";
 import NotFound from "../common/NotFound";
@@ -17,7 +14,7 @@ import Alert from "react-s-alert";
 import "react-s-alert/dist/s-alert-default.css";
 import "react-s-alert/dist/s-alert-css-effects/slide.css";
 import "./App.css";
-import PostMain from "../home/MainList";
+
 
 class App extends Component {
   constructor(props) {
@@ -80,12 +77,6 @@ class App extends Component {
       return <LoadingIndicator />;
     }
 
-    //리다이렉션 1번
-    // const accessToken = localStorage.getItem("accessToken");
-    // if (accessToken) {
-    //   this.state.authenticated = true;
-    // }
-
     //리다이렉션 1번 & null값 수정
     const accessToken = localStorage.getItem(ACCESS_TOKEN);
     if (accessToken) {
@@ -102,8 +93,8 @@ class App extends Component {
         </div>
         <div className="app-body">
           <Route exact path="/" component={Home}></Route>
-          <Route exact path="/" component={Order}></Route>
-          <Route exact path="/" component={MainList}></Route>
+          {/* <Route exact path="/" component={Order}></Route> */}
+         
           <Switch>
             <PrivateRoute
               path="/profile"
@@ -117,12 +108,6 @@ class App extends Component {
                 <Login authenticated={this.state.authenticated} {...props} />
               )}
             ></Route>
-            {/* <Route
-              path="/signup"
-              render={(props) => (
-                <Signup authenticated={this.state.authenticated} {...props} />
-              )}
-            ></Route> */}
             <Route
               path="/oauth2/redirect"
               component={OAuth2RedirectHandler}
