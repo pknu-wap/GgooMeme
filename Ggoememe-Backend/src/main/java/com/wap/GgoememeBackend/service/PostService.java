@@ -40,12 +40,6 @@ public class PostService {
 
     }
 
-    public List<PostPreviewDto> findAllPreviews() {
-        List<Post> posts = postRepository.findAll();
-        return posts.stream()
-                .map(PostPreviewDto::of)
-                .collect(Collectors.toList());
-    }
 
     public PostDto findById(UserPrincipal userPrincipal, Long id) throws NoSuchElementException {
         Post post = postRepository.findById(id)
