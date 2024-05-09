@@ -3,9 +3,13 @@ package com.wap.GgoememeBackend.controller;
 import com.wap.GgoememeBackend.payload.PostDto;
 import com.wap.GgoememeBackend.payload.response.post.MainPostResponse;
 import com.wap.GgoememeBackend.payload.response.post.RelatedPostResponse;
+import com.wap.GgoememeBackend.payload.response.post.SearchPostResponse;
 import com.wap.GgoememeBackend.security.CurrentUser;
 import com.wap.GgoememeBackend.security.UserPrincipal;
 import com.wap.GgoememeBackend.service.PostService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +27,7 @@ public class PostController {
         this.postService = postService;
     }
 
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = PostDto.class)))
     @GetMapping("/post/info/{id}")
     public ResponseEntity<?> postInfo(@CurrentUser UserPrincipal userPrincipal, @PathVariable("id") Long id) {
         PostDto postDto;
@@ -34,6 +39,7 @@ public class PostController {
         return new ResponseEntity<>(postDto, HttpStatus.OK);
     }
 
+    @ApiResponse(responseCode = "200", description = "clicked bookmark")
     @PutMapping("/post/bookmark/{id}/{page}")
     public ResponseEntity<String> clickBookmark(@CurrentUser UserPrincipal userPrincipal, @PathVariable("id") Long id){
         String result;
@@ -45,6 +51,7 @@ public class PostController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = RelatedPostResponse.class)))
     @GetMapping("/post/related/{id}/{page}")
     public ResponseEntity<?> getRelated(@PathVariable("id") Long id, @PathVariable("page") int page){
         RelatedPostResponse relatedPostResponse;
@@ -56,6 +63,7 @@ public class PostController {
         return new ResponseEntity<>(relatedPostResponse, HttpStatus.OK);
     }
 
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = MainPostResponse.class)))
     @GetMapping("/post/main/{page}")
     public ResponseEntity<?> getMainPosts(@PathVariable("page") int page){
         MainPostResponse mainPostResponse;
@@ -65,5 +73,17 @@ public class PostController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<>(mainPostResponse, HttpStatus.OK);
+    }
+
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = SearchPostResponse.class)))
+    @GetMapping("/post/search/{hashtag}/{page}")
+    public ResponseEntity<?> searchPosts(@PathVariable("hashtag") String hashtag, @PathVariable("page") int page){
+        SearchPostResponse searchPostResponse;
+        try {
+            searchPostResponse = postService.searchPosts(hashtag, page);
+        }catch (RuntimeException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(searchPostResponse, HttpStatus.OK);
     }
 }

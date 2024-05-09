@@ -4,14 +4,19 @@ import com.wap.GgoememeBackend.domain.Post;
 import com.wap.GgoememeBackend.domain.User;
 import com.wap.GgoememeBackend.payload.PostDto;
 import com.wap.GgoememeBackend.payload.PostPreviewDto;
+import com.wap.GgoememeBackend.payload.PostPreviewDtos;
 import com.wap.GgoememeBackend.payload.response.post.MainPostResponse;
 import com.wap.GgoememeBackend.payload.response.post.RelatedPostResponse;
+import com.wap.GgoememeBackend.payload.response.post.SearchPostResponse;
 import com.wap.GgoememeBackend.repository.MainPostRepository;
 import com.wap.GgoememeBackend.repository.PostRepository;
 import com.wap.GgoememeBackend.repository.QueryDSLRepository;
 import com.wap.GgoememeBackend.repository.UserRepository;
 import com.wap.GgoememeBackend.security.UserPrincipal;
 import lombok.Getter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -82,5 +87,12 @@ public class PostService {
     public MainPostResponse getMainPosts(int page) throws RuntimeException {
 
         return mainPostRepository.pageOfMainPosts(page);
+    }
+
+    public SearchPostResponse searchPosts(String hashtag, int page){
+        PageRequest pageRequest = PageRequest.of(page - 1, 20, Sort.by("id").descending());
+        Page<Post> pageOfPosts = postRepository.findByHashtagsName(hashtag, pageRequest);
+        return new SearchPostResponse(pageOfPosts.hasNext(), PostPreviewDtos.of(pageOfPosts.getContent()));
+
     }
 }
