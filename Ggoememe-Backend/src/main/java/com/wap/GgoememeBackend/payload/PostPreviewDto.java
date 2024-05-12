@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostPreviewDto {
-    private Long postId;
+    private String postId;
     private String postImage;
 
 

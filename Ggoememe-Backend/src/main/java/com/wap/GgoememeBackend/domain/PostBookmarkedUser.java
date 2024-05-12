@@ -1,27 +1,25 @@
 package com.wap.GgoememeBackend.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "hashtags")
-public class Hashtag {
+@AllArgsConstructor
+@Table(name="post_bookmarked_user")
+public class PostBookmarkedUser {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String postId;
 
-    @ManyToMany(mappedBy = "hashtags", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Post> posts = new HashSet<>();
-
-
+    @ManyToOne
+    private User user;
 }

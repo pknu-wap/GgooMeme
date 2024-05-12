@@ -2,7 +2,7 @@ package com.wap.GgoememeBackend.security;
 
 import com.wap.GgoememeBackend.domain.User;
 import com.wap.GgoememeBackend.exception.ResourceNotFoundException;
-import com.wap.GgoememeBackend.repository.UserRepository;
+import com.wap.GgoememeBackend.repository.mysql.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

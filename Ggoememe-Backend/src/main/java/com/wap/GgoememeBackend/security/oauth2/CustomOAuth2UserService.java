@@ -3,7 +3,7 @@ package com.wap.GgoememeBackend.security.oauth2;
 import com.wap.GgoememeBackend.domain.AuthProvider;
 import com.wap.GgoememeBackend.domain.User;
 import com.wap.GgoememeBackend.exception.OAuth2AuthenticationProcessingException;
-import com.wap.GgoememeBackend.repository.UserRepository;
+import com.wap.GgoememeBackend.repository.mysql.UserRepository;
 import com.wap.GgoememeBackend.security.UserPrincipal;
 import com.wap.GgoememeBackend.security.oauth2.user.OAuth2UserInfo;
 import com.wap.GgoememeBackend.security.oauth2.user.OAuth2UserInfoFactory;

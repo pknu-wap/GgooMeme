@@ -24,7 +24,7 @@ public class ReplyController {
 
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = ReplyResponse.class)))
     @GetMapping("/reply/{postId}/{page}")
-    public ResponseEntity<?> getReplies(@PathVariable("postId")Long postId, @PathVariable("page") int page){
+    public ResponseEntity<?> getReplies(@PathVariable("postId")String postId, @PathVariable("page") int page){
         ReplyResponse replies;
         try {
             replies = replyService.findByPostId(postId, page);
