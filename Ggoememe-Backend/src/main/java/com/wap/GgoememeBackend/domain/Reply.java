@@ -19,7 +19,5 @@ public class Reply {
 
     private String text;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Post post;
-
+    private String postId;
 }

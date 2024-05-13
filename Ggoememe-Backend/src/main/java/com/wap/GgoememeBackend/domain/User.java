@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -31,11 +32,9 @@ public class User {
 
     private String imageUrl;
 
-    @ManyToMany(mappedBy = "bookmarkedUsers", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Post> bookmarkedPosts = new HashSet<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<PostBookmarkedUser> bookmarkedPosts;
 
-    @ManyToMany(mappedBy = "likedUsers", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Post> likedPosts = new HashSet<>();
 
     @Column(nullable = false)
     private Boolean emailVerified = false;

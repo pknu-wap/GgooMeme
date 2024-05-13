@@ -3,7 +3,7 @@ package com.wap.GgoememeBackend.controller;
 import com.wap.GgoememeBackend.payload.MyPageDto;
 import com.wap.GgoememeBackend.payload.PostPreviewDtos;
 import com.wap.GgoememeBackend.payload.UserDto;
-import com.wap.GgoememeBackend.repository.UserRepository;
+import com.wap.GgoememeBackend.repository.mysql.UserRepository;
 import com.wap.GgoememeBackend.security.CurrentUser;
 import com.wap.GgoememeBackend.security.UserPrincipal;
 import com.wap.GgoememeBackend.service.MyPageService;

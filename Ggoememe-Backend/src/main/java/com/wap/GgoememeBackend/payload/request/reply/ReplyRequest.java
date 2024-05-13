@@ -10,6 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReplyRequest {
-    private Long postId;
+    private String postId;
     private String text;
 }
