@@ -71,6 +71,11 @@ class App extends Component {
     Alert.success("You're safely logged out!");
   }
 
+  handleSearch = (searchTerm, page) => {
+    // 검색어와 페이지 정보를 업데이트합니다.
+    this.setState({ searchTerm, currentPage: page });
+  };
+
   componentDidMount() {
     this.loadCurrentlyLoggedInUser();
   }
@@ -92,6 +97,7 @@ class App extends Component {
           <AppHeader
             authenticated={this.state.authenticated}
             onLogout={this.handleLogout}
+            //onSearch={this.handleSearch}
           />
         </div>
         <div className="app-body">
@@ -99,7 +105,6 @@ class App extends Component {
             <Route exact path="/" component={Home}></Route>
             <Route exact path="/detail/:postId" component={DetailPage}></Route>
             <Route path="/list/:hashtag/:page" component={ListPage} />
-
             <PrivateRoute
               path="/profile"
               authenticated={this.state.authenticated}

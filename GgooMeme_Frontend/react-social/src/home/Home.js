@@ -4,6 +4,8 @@ import { API_BASE_URL, ACCESS_TOKEN } from "../constants";
 import "./Home.css";
 import pencilLogo from "../../src/img/pencil.png";
 import { Link } from "react-router-dom";
+import { fetchImagesByHashtags } from "../util/APIUtils";
+
 
 class Home extends Component {
   constructor(props) {
@@ -84,10 +86,7 @@ class Home extends Component {
   }
 
   fetchImagesByHashtags = (hashtag, page) => {
-    request({
-      url: API_BASE_URL + `/post/search/${hashtag}/${page + 1}`,
-      method: "GET",
-    })
+    fetchImagesByHashtags(hashtag, page)
       .then((data) => {
         console.log("Received images:", data);
         this.setState({
@@ -160,11 +159,17 @@ class Home extends Component {
     }
   };
 
+  // input 요소의 값이 변경될 때 호출되는 메서드
   handleInputChange = (event) => {
     const { value } = event.target;
     this.setState({ hashtag: value, page: 0 }, () => {
       // 검색어가 변경될 때 페이지를 0으로 초기화
-      this.fetchImagesByHashtags(value, 0); // 페이지를 0으로 초기화하여 검색 API 호출
+      if (value.trim() !== "") {
+        // 입력값이 빈 문자열이 아닌 경우에만 요청을 보냄
+        this.fetchImagesByHashtags(value, 0); // 페이지를 0으로 초기화하여 검색 API 호출
+      } else {
+        // 빈 문자열인 경우 다른 처리를 수행하거나 요청을 보내지 않음
+      }
     });
   };
 
@@ -196,12 +201,12 @@ class Home extends Component {
     } = this.state;
 
     if (loading) {
-      return <div>Loading...</div>;
+      return <div className="loading">Loading...</div>;
     }
     //test를 위해 잠시 주석 표시
-    // if (error) {
-    //   return <div>Error: {error}</div>;
-    // }
+    if (error) {
+      return <div>Error: {error}</div>;
+    }
 
     const columnElements = Array.from({ length: columns }, () => []);
 

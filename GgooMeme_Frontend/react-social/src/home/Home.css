@@ -3,6 +3,11 @@
   font-weight: normal;
   src:url("../../src/fonts/Kanit-Regular.ttf") fromat("truetype");
 }
+.loading {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
 
 /* 배너(홈) */
 
