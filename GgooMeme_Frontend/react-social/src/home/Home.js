@@ -59,7 +59,7 @@ class Home extends Component {
     }
   };
 
-  //이미지 정보 가져오기
+  //이미지 정보 가져오기(처음 렌더링시)
   fetchPostData(page) {
     request({
       url: API_BASE_URL + `/post/main/${page}`,
@@ -154,19 +154,15 @@ class Home extends Component {
   //input 검색시 (endter키/ onchange)
   handleKeyPress = (event) => {
     if (event.key === "Enter") {
-      this.handleSearch();
+      const { hashtag, page } = this.state; // 현재 페이지 상태를 가져옴
+      //this.fetchImagesByHashtags(hashtag, page);
+      this.props.history.push(`/list/${hashtag}/${page}`);
     }
-  };
-
-  handleSearch = () => {
-    const { hashtag, page } = this.state; // 현재 페이지 상태를 가져옴
-    this.fetchImagesByHashtags(hashtag, page); // 현재 페이지를 검색 API 호출에 전달
-    //this.fetchData(page,hashtag);
   };
 
   handleInputChange = (event) => {
     const { value } = event.target;
-    this.setState({ hashtags: value, page: 0 }, () => {
+    this.setState({ hashtag: value, page: 0 }, () => {
       // 검색어가 변경될 때 페이지를 0으로 초기화
       this.fetchImagesByHashtags(value, 0); // 페이지를 0으로 초기화하여 검색 API 호출
     });
@@ -257,31 +253,41 @@ class Home extends Component {
                   className="tag-box"
                   onClick={() => this.handleTagClick("html")}
                 >
-                  <a className="tag-name"><span>html</span></a>
+                  <a className="tag-name">
+                    <span>html</span>
+                  </a>
                 </div>
                 <div
                   className="tag-box"
                   onClick={() => this.handleTagClick("CSS")}
                 >
-                  <a className="tag-name"><span>CSS</span></a>
+                  <a className="tag-name">
+                    <span>CSS</span>
+                  </a>
                 </div>
                 <div
                   className="tag-box"
                   onClick={() => this.handleTagClick("")}
                 >
-                  <a className="tag-name"><span>일러스트</span></a>
+                  <a className="tag-name">
+                    <span>일러스트</span>
+                  </a>
                 </div>
                 <div
                   className="tag-box"
                   onClick={() => this.handleTagClick("")}
                 >
-                  <a className="tag-name"><span>icon</span></a>
+                  <a className="tag-name">
+                    <span>icon</span>
+                  </a>
                 </div>
                 <div
                   className="tag-box"
                   onClick={() => this.handleTagClick("")}
                 >
-                  <a className="tag-name"><span>캐리커쳐</span></a>
+                  <a className="tag-name">
+                    <span>캐리커쳐</span>
+                  </a>
                 </div>
               </div>
             </div>

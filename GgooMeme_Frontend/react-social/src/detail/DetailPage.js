@@ -6,7 +6,7 @@ class DetailPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      postId: this.props.match.params.id, // URL에서 postId 가져오기
+      postId: this.props.match.params.postId, // URL에서 postId 가져오기
       postInfo: null,
       loading: true,
       error: null,
@@ -14,7 +14,7 @@ class DetailPage extends Component {
   }
 
   componentDidMount() {
-    const postId = this.props.match.params.id;
+    const postId = this.props.match.params.postId;
     if (postId) {
       this.setState({ postId }, () => {
         this.fetchPostInfo();

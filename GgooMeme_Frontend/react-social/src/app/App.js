@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import AppHeader from "../common/AppHeader";
 import Home from "../home/Home";
 import DetailPage from '../detail/DetailPage';
+import ListPage from '../list/ListPage';
 import Login from "../user/login/Login";
 import Profile from "../user/profile/Profile";
 import OAuth2RedirectHandler from "../user/oauth2/OAuth2RedirectHandler";
@@ -97,6 +98,8 @@ class App extends Component {
           <Switch>
             <Route exact path="/" component={Home}></Route>
             <Route exact path="/detail/:postId" component={DetailPage}></Route>
+            <Route path="/list/:hashtag/:page" component={ListPage} />
+
             <PrivateRoute
               path="/profile"
               authenticated={this.state.authenticated}
