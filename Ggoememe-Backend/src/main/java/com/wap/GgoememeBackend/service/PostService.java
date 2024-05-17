@@ -90,10 +90,9 @@ public class PostService {
         return new MainPostResponse(hasNext, PostPreviewDtos.of(posts));
     }
 
-    public SearchPostResponse searchPosts(String hashtag, int page){
+    public SearchPostResponse searchPosts(String tag, int page){
         PageRequest pageRequest = PageRequest.of(page - 1, 20, Sort.by("id").descending());
-        Page<Post> pageOfPosts = postRepository.findByTags(hashtag, pageRequest);
+        Page<Post> pageOfPosts = postRepository.findByTags(tag, pageRequest);
         return new SearchPostResponse(pageOfPosts.hasNext(), PostPreviewDtos.of(pageOfPosts.getContent()));
-
     }
 }
