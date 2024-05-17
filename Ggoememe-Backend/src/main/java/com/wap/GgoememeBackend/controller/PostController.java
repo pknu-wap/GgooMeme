@@ -29,7 +29,7 @@ public class PostController {
 
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = PostDto.class)))
     @GetMapping("/post/info/{id}")
-    public ResponseEntity<?> postInfo(@CurrentUser UserPrincipal userPrincipal, @PathVariable("id") Long id) {
+    public ResponseEntity<?> postInfo(@CurrentUser UserPrincipal userPrincipal, @PathVariable("id") String id) {
         PostDto postDto;
         try {
             postDto = postService.findById(userPrincipal, id);
@@ -40,8 +40,8 @@ public class PostController {
     }
 
     @ApiResponse(responseCode = "200", description = "clicked bookmark")
-    @PutMapping("/post/bookmark/{id}/{page}")
-    public ResponseEntity<String> clickBookmark(@CurrentUser UserPrincipal userPrincipal, @PathVariable("id") Long id){
+    @PutMapping("/post/bookmark/{id}")
+    public ResponseEntity<String> clickBookmark(@CurrentUser UserPrincipal userPrincipal, @PathVariable("id") String id){
         String result;
         try {
             result= postService.clickBookmark(userPrincipal, id);
@@ -53,7 +53,7 @@ public class PostController {
 
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = RelatedPostResponse.class)))
     @GetMapping("/post/related/{id}/{page}")
-    public ResponseEntity<?> getRelated(@PathVariable("id") Long id, @PathVariable("page") int page){
+    public ResponseEntity<?> getRelated(@PathVariable("id") String id, @PathVariable("page") int page){
         RelatedPostResponse relatedPostResponse;
         try {
             relatedPostResponse = postService.getRelatedPosts(id, page);
@@ -76,11 +76,11 @@ public class PostController {
     }
 
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = SearchPostResponse.class)))
-    @GetMapping("/post/search/{hashtag}/{page}")
-    public ResponseEntity<?> searchPosts(@PathVariable("hashtag") String hashtag, @PathVariable("page") int page){
+    @GetMapping("/post/search/{tag}/{page}")
+    public ResponseEntity<?> searchPosts(@PathVariable("tag") String tag, @PathVariable("page") int page){
         SearchPostResponse searchPostResponse;
         try {
-            searchPostResponse = postService.searchPosts(hashtag, page);
+            searchPostResponse = postService.searchPosts(tag, page);
         }catch (RuntimeException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
         }

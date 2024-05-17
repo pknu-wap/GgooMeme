@@ -2,7 +2,7 @@ package com.wap.GgoememeBackend.service;
 
 import com.wap.GgoememeBackend.domain.User;
 import com.wap.GgoememeBackend.payload.UserDto;
-import com.wap.GgoememeBackend.repository.UserRepository;
+import com.wap.GgoememeBackend.repository.mysql.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

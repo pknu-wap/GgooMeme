@@ -14,13 +14,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostPreviewDto {
-    private Long postId;
+    private String postId;
     private String postImage;
 
 
     public static PostPreviewDto of(Post post){
 
         return new PostPreviewDto(post.getId(),
-                post.getImage());
+                post.getSrc());
     }
 }
