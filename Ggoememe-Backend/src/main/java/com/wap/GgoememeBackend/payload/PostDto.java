@@ -20,7 +20,7 @@ public class PostDto {
     public static PostDto of(Post post){
 
         return new PostDto(post.getId(),
-                post.getImage(),
+                post.getSrc(),
                 post.getTags(),
                 false);
     }

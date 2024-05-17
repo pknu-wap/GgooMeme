@@ -76,11 +76,11 @@ public class PostController {
     }
 
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = SearchPostResponse.class)))
-    @GetMapping("/post/search/{hashtag}/{page}")
-    public ResponseEntity<?> searchPosts(@PathVariable("hashtag") String hashtag, @PathVariable("page") int page){
+    @GetMapping("/post/search/{tag}/{page}")
+    public ResponseEntity<?> searchPosts(@PathVariable("tag") String tag, @PathVariable("page") int page){
         SearchPostResponse searchPostResponse;
         try {
-            searchPostResponse = postService.searchPosts(hashtag, page);
+            searchPostResponse = postService.searchPosts(tag, page);
         }catch (RuntimeException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
         }

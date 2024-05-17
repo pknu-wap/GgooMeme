@@ -21,6 +21,6 @@ public class PostPreviewDto {
     public static PostPreviewDto of(Post post){
 
         return new PostPreviewDto(post.getId(),
-                post.getImage());
+                post.getSrc());
     }
 }

@@ -19,9 +19,9 @@ import java.util.stream.Collectors;
 @Document(collection="posts")
 public class Post {
     @Id
-    private String Id;
+    private String id;
 
-    private String image;
+    private String src;
 
     private List<String> tags;
 }
