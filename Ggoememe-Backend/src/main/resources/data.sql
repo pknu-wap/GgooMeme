@@ -1,5 +1,5 @@
 INSERT INTO users(id, email, email_verified, image_url, name, password, provider, provider_id)
-VALUES(1, 'lcl8661@gmail.com', 0, 'https://lh3.googleusercontent.com/a/ACg8ocK8s0zbZgNWzw8F9MbvqZlKMGAfUjXlsnluEezFSiJ9Zn-MiBwK=s96-c', '이채린', NULL, 'google', '109253574579197183232');
+VALUES(1, 'lcl8661@gmail.com', 0, 'https://lh3.googleusercontent.com/a/ACg8ocK8s0zbZgNWzw8F9MbvqZlKMGAfUjXlsnluEezFSiJ9Zn-MiBwK=s96-c', '이채린', '8661lcllcl', 'google', '109253574579197183232');
 
 -- ALTER TABLE posts MODIFY image VARCHAR(10001) NOT NULL;
 --

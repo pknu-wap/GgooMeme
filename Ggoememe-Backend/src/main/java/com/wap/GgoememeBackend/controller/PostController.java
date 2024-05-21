@@ -64,12 +64,20 @@ public class PostController {
     }
 
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = MainPostResponse.class)))
-    @GetMapping("/post/main/{page}")
-    public ResponseEntity<?> getMainPosts(@PathVariable("page") int page){
+    @GetMapping("/post/main/{page}/{order}")
+    public ResponseEntity<?> getMainPosts(@PathVariable("page") int page, @PathVariable("order") String order) {
         MainPostResponse mainPostResponse;
         try {
-            mainPostResponse = postService.getMainPosts(page);
-        }catch (RuntimeException e){
+            if ("random".equals(order)) {
+                mainPostResponse = postService.randomMainPosts(page);
+            } else if ("reply".equals(order)) {
+                mainPostResponse = postService.replyMainPosts(page);
+            } else if ("bookmark".equals(order)) {
+                mainPostResponse = postService.bookmarkMainPosts(page);
+            } else {
+                mainPostResponse = postService.bookmarkMainPosts(page);
+            }
+        } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<>(mainPostResponse, HttpStatus.OK);
