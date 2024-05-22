@@ -1,5 +1,6 @@
 package com.wap.GgoememeBackend.service;
 
+import com.wap.GgoememeBackend.domain.CachedPost;
 import com.wap.GgoememeBackend.domain.Post;
 import com.wap.GgoememeBackend.domain.PostBookmarkedUser;
 import com.wap.GgoememeBackend.domain.User;
@@ -135,4 +136,5 @@ public class PostService {
         return new MainPostResponse(pageOfPosts.hasNext(), PostPreviewDtos.of(pageOfPosts.getContent()));
 
     }
+
 }

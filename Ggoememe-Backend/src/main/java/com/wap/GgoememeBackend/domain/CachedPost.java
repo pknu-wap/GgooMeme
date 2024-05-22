@@ -29,6 +29,12 @@ public class CachedPost {
         this.randId = generateRandomId();
     }
 
+    public CachedPost(String id, String src, List<String> tags) {
+        this.id = id;
+        this.src = src;
+        this.tags = tags;
+    }
+
     private int generateRandomId() {
         Random random = new Random();
         return random.nextInt(100000000);
