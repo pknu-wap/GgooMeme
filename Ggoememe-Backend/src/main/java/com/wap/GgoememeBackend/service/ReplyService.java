@@ -30,7 +30,7 @@ public class ReplyService {
                 .orElseThrow(() -> new NoSuchElementException("no post"));
 
         //postId기반으로 Reply를 20개씩 페이지네이션 해야 함
-        PageRequest pageRequest = PageRequest.of(page, 20, Sort.by("id").descending());
+        PageRequest pageRequest = PageRequest.of(page-1, 20, Sort.by("id").descending());
         Page<Reply> pagedReplies = replyRepository.findRepliesByPostId(post.getId(), pageRequest);
         List<String> replies = pagedReplies.getContent().stream()
                 .map(r -> r.getText())
