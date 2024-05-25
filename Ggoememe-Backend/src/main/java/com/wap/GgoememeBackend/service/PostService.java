@@ -44,17 +44,17 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NoSuchElementException("no post"));
 
-        User user = userRepository.findById(userPrincipal.getId())
-                .orElseThrow(() -> new NoSuchElementException("no user"));
-
-        PostDto postDto = PostDto.of(post);
-
-        //post의 유저중에 user의 id와 일치하는 user가 있는지 확인
-
-        Optional<PostBookmarkedUser> postBookmarkedUser = postBookmarkedUserRepository.findByPostIdAndUser(postId, user);
-        if(postBookmarkedUser.isPresent()){
-            postDto.setBookmarked(true);
+        boolean isBookmarked = false;
+        if(userPrincipal!=null){
+            User user = userRepository.findById(userPrincipal.getId())
+                    .orElseThrow(() -> new NoSuchElementException("no user"));
+            Optional<PostBookmarkedUser> postBookmarkedUser = postBookmarkedUserRepository.findByPostIdAndUser(postId, user);
+            if(postBookmarkedUser.isPresent()){
+                isBookmarked=true;
+            }
         }
+        PostDto postDto = PostDto.of(post);
+        postDto.setBookmarked(isBookmarked);
         return postDto;
     }
 
