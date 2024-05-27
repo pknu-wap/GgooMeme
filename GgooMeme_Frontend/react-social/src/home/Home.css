@@ -129,8 +129,14 @@
 }
 
 .gallery-item {
+    cursor: pointer;
     list-style-type: none;
     margin-bottom: 20px; /* 각 아이템 사이의 간격 조절 */
+    transition: transform 0.3s ease;
+}
+
+.gallery-item:hover {
+  transform: scale(1.05); /* 마우스를 올렸을 때 살짝 튀어나오게 (확대) */
 }
 
 .gallery-item img {
