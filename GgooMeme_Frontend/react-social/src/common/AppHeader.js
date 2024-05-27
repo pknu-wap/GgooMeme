@@ -2,43 +2,59 @@ import React, { Component } from "react";
 import { Link, NavLink, withRouter } from "react-router-dom";
 import "./AppHeader.css";
 import { fetchImagesByHashtags, getCurrentUser } from "../util/APIUtils";
-
+import { ACCESS_TOKEN } from "../constants";
 
 class AppHeader extends Component {
   constructor(props) {
     super(props);
     this.state = {
       searchTerm: "", // 입력값 상태 추가
-      page :0,
-      currentUser: null
+      page: 0,
+      currentUser: null,
     };
   }
 
   componentDidMount() {
     // 컴포넌트가 mount될 때 현재 경로에 따라 이전 검색어를 가져옴
     this.updateSearchTerm();
-    this.getCurrentUser();
+    this.loadCurrentUser();
   }
-  
+
   componentDidUpdate(prevProps, prevState) {
     // 이전 경로와 현재 경로가 다르고, 현재 경로가 "/list/"를 포함할 때만 검색어 업데이트
-    if (prevProps.location.pathname !== this.props.location.pathname && this.props.location.pathname.includes("/list/")) {
+    if (
+      prevProps.location.pathname !== this.props.location.pathname &&
+      this.props.location.pathname.includes("/list/")
+    ) {
       this.updateSearchTerm();
     }
   }
   // 현재 사용자 정보를 가져오는 함수
-  getCurrentUser = () => {
+  // getCurrentUser = () => {
+  //   getCurrentUser()
+  //     .then((response) => {
+  //       this.setState({
+  //         currentUser: response, // 가져온 사용자 정보를 상태에 저장
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching current user:", error);
+  //     });
+  // };
+
+  loadCurrentUser = () => {
+    const token = localStorage.getItem(ACCESS_TOKEN);
+    if (!token) return;
+
     getCurrentUser()
-      .then((response) => {
-        this.setState({
-          currentUser: response // 가져온 사용자 정보를 상태에 저장
-        });
-      })
-      .catch((error) => {
-        console.error("Error fetching current user:", error);
+      .then(response => {
+        this.setState({ currentUser: response });
+        this.props.setCurrentUser(response); // 부모 컴포넌트에 사용자 정보 설정
+      }).catch(error => {
+        console.error('Error fetching current user:', error);
       });
   };
-  
+
   // 현재 경로에 따라 검색어 업데이트
   updateSearchTerm() {
     const currentPath = this.props.location.pathname;
@@ -46,7 +62,7 @@ class AppHeader extends Component {
       const parts = currentPath.split("/");
       this.setState({
         searchTerm: parts[2],
-        page: parts[3]
+        page: parts[3],
       });
     }
   }
@@ -64,20 +80,20 @@ class AppHeader extends Component {
       }
     });
   };
-  
+
   // Enter 키 입력 처리
   handleKeyPress = (event) => {
     if (event.key === "Enter") {
       const { searchTerm, page } = this.state;
       // 현재 경로에서 /를 제외한 부분에 따라서 이동
       this.props.history.push(`/list/${searchTerm}/${page}`);
-      window.location.reload();
+      //window.location.reload();
       //this.props.onSearch(searchTerm, page);
     }
   };
 
   render() {
-    const { authenticated} = this.props;
+    const { authenticated } = this.props;
     //const { currentUser } = this.state;
     const currentPath = window.location.pathname;
 
