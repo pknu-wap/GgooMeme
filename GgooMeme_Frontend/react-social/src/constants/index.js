@@ -1,4 +1,5 @@
-export const API_BASE_URL = 'https://port-0-ggoomeme-2aat2clunucjsg.sel5.cloudtype.app';
+//export const API_BASE_URL = 'https://port-0-ggoomeme-2aat2clunucjsg.sel5.cloudtype.app';
+export const API_BASE_URL = 'https://backendu.com';
 export const ACCESS_TOKEN = 'accessToken';
 
 export const OAUTH2_REDIRECT_URI = 'http://localhost:3000/oauth2/redirect';

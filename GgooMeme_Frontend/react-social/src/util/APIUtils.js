@@ -49,5 +49,17 @@ export function signup(signupRequest) {
     });
 }
 
+export const fetchImagesByHashtags = (hashtag, page) => {
+    return request({
+      url: API_BASE_URL + `/post/search/${hashtag}/${page + 1}`,
+      method: "GET",
+    });
+  };
 
+  export function relatedImages(Id, page) {
+    return request({
+        url: API_BASE_URL + `/post/related/${Id}/${page}`,
+        method: "GET",
+    });
+  };
 

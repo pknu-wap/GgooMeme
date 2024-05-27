@@ -1,0 +1,10 @@
+.img-gallery {
+    display: flex;
+    justify-content: center;
+    padding-top:100px;
+    /* align-items:flex-start; */
+}
+
+.gallery-column {
+    margin: 0 20px; /* 각 열 사이의 간격 조절 */
+}
