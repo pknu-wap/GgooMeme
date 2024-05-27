@@ -219,6 +219,11 @@ class Home extends Component {
     this.props.history.push(detailPageURL);
   };
 
+  handleMoreClick = () => {
+    const { hashtag, page, order } = this.state;
+    this.props.history.push(`/list/${hashtag}/${page + 1}`);
+  }
+
   render() {
     const {
       postPreviewDtos,
@@ -276,42 +281,42 @@ class Home extends Component {
               <div className="tag-container">
                 <div
                   className="tag-box"
-                  onClick={() => this.handleTagClick("html")}
+                  onClick={() => this.handleTagClick("캐릭터")}
                 >
                   <a className="tag-name">
-                    <span>html</span>
+                    <span>캐릭터</span>
                   </a>
                 </div>
                 <div
                   className="tag-box"
-                  onClick={() => this.handleTagClick("CSS")}
+                  onClick={() => this.handleTagClick("사람")}
                 >
                   <a className="tag-name">
-                    <span>CSS</span>
+                    <span>사람</span>
                   </a>
                 </div>
                 <div
                   className="tag-box"
-                  onClick={() => this.handleTagClick("")}
+                  onClick={() => this.handleTagClick("꽃")}
                 >
                   <a className="tag-name">
-                    <span>일러스트</span>
+                    <span>꽃</span>
                   </a>
                 </div>
                 <div
                   className="tag-box"
-                  onClick={() => this.handleTagClick("")}
+                  onClick={() => this.handleTagClick("식물")}
                 >
                   <a className="tag-name">
-                    <span>icon</span>
+                    <span>식물</span>
                   </a>
                 </div>
                 <div
                   className="tag-box"
-                  onClick={() => this.handleTagClick("")}
+                  onClick={() => this.handleTagClick("동물")}
                 >
                   <a className="tag-name">
-                    <span>캐리커쳐</span>
+                    <span>동물</span>
                   </a>
                 </div>
               </div>
@@ -372,22 +377,9 @@ class Home extends Component {
 
           {/* 페이지 네이션 */}
           <div className="pagination">
-            {hasNext && page === 0 && (
-              <button
-                className="load-more"
-                onClick={() => this.handlePageChange(page + 1)}
-              >
-                다음페이지
-              </button>
-            )}
-            {!hasNext && page > 0 && (
-              <button
-                className="load-back"
-                onClick={() => this.handlePageChange(page - 1)}
-              >
-                이전페이지
-              </button>
-            )}
+            <button className="load-more" onClick={this.handleMoreClick}>
+              더보기
+            </button>
           </div>
         </div>
       </div>

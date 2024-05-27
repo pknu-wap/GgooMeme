@@ -11,15 +11,20 @@ class ListPage extends Component {
     error: null,
     page: 0,
     columns: 6,
+    hashtag:null,
+    hasNext: true,
+    isFetching: false,
   };
 
   componentDidMount() {
     this.updateSearchTerm();
     window.addEventListener("resize", this.handleResize);
+    window.addEventListener("scroll", this.handleScroll);
   }
 
   componentWillUnmount() {
     window.removeEventListener("resize", this.handleResize);
+    window.removeEventListener("scroll", this.handleScroll);
   }
 
   componentDidUpdate(prevProps) {
@@ -30,9 +35,39 @@ class ListPage extends Component {
 
   updateSearchTerm() {
     const { hashtag } = this.props.match.params;
-    this.fetchImagesByHashtags(hashtag, this.state.page);
+    if (hashtag && hashtag !== "null") {
+      this.setState({ hashtag }, () => {
+        this.fetchImagesByHashtags(hashtag, 0); // Reset to first page
+      });
+    } else {
+      this.setState({ hashtag: null }, () => {
+        this.fetchPostData(0, "랜덤순"); // Reset to first page
+      });
+    }
   }
 
+  handleScroll = () => {
+    const { loading, hasNext, isFetching } = this.state;
+    if (loading || !hasNext || isFetching) return;
+  
+    if (
+      window.innerHeight + document.documentElement.scrollTop ===
+      document.documentElement.offsetHeight
+    ) {
+      this.loadMorePosts();
+    }
+  };
+  
+  loadMorePosts = () => {
+    const { hashtag, page } = this.state;
+    this.setState({ isFetching: true });
+    if (hashtag) {
+      this.fetchImagesByHashtags(hashtag, page + 1);
+    } else {
+      this.fetchPostData(page + 1, "랜덤순");
+    }
+  };
+  
   handleResize = () => {
     // 화면 너비에 따라 열의 수를 동적으로 변경
     this.setState({ columns: this.calculateColumns() });
@@ -58,25 +93,52 @@ class ListPage extends Component {
     }
   };
 
-  fetchImagesByHashtags = (hashtag, page) => {
-    fetchImagesByHashtags(hashtag, page)
+  fetchPostData(page, order) {
+    request({
+      url: API_BASE_URL + `/post/main/${page}/${order}`,
+      method: "GET",
+    })
       .then((data) => {
-        console.log("Received images:", data);
-        this.setState({
-          postPreviewDtos: data.postDtos.postPreviewDtos,
+        this.setState((prevState) => ({
+          postPreviewDtos: [...prevState.postPreviewDtos, ...data.postDtos.postPreviewDtos],
           hasNext: data.hasNext,
           loading: false,
+          isFetching: false,
           error: null,
           page: page,
-        });
+          order: order,
+        }));
       })
       .catch((error) => {
         this.setState({
           loading: false,
+          isFetching: false,
+          error: error.message,
+        });
+      });
+  }
+  
+  fetchImagesByHashtags = (hashtag, page) => {
+    fetchImagesByHashtags(hashtag, page)
+      .then((data) => {
+        this.setState((prevState) => ({
+          postPreviewDtos: [...prevState.postPreviewDtos, ...data.postDtos.postPreviewDtos],
+          hasNext: data.hasNext,
+          loading: false,
+          isFetching: false,
+          error: null,
+          page: page,
+        }));
+      })
+      .catch((error) => {
+        this.setState({
+          loading: false,
+          isFetching: false,
           error: error.message,
         });
       });
   };
+  
 
   // 이미지 클릭 시 상세 페이지로 이동하는 함수
   handleImageClick = (postId) => {
@@ -87,7 +149,7 @@ class ListPage extends Component {
   };
 
   render() {
-    const { postPreviewDtos, loading, error, columns } = this.state;
+    const { postPreviewDtos, loading, error, columns, isFetching, hasNext } = this.state;
 
     if (loading) {
       return <div>Loading...</div>;
@@ -114,16 +176,19 @@ class ListPage extends Component {
 
     return (
       <div>
-        {/* 이미지 갤러리 */}
-        <div className="img-gallery">
-        <h1>{this.hashtag}</h1>
-          {columnElements.map((column, index) => (
-            <div key={index} className="gallery-column">
-              {column}
-            </div>
-          ))}
-        </div>
+      {/* 이미지 갤러리 */}
+      <div className="img-gallery">
+        {columnElements.map((column, index) => (
+          <div key={index} className="gallery-column">
+            {column}
+          </div>
+        ))}
       </div>
+      {isFetching && <div>Loading more...</div>}
+      {!isFetching && hasNext && (
+        <button className="load-more"onClick={this.loadMorePosts}>Load More</button>
+      )}
+    </div>
     );
   }
 }

@@ -49,6 +49,13 @@ export function signup(signupRequest) {
     });
 }
 
+// export const fetchPostData = (page, order) => {
+//     return request({
+//         url: API_BASE_URL + `/post/main/${page}/${order}`,
+//         method: "GET",
+//     });
+// };
+
 export const fetchImagesByHashtags = (hashtag, page) => {
     return request({
       url: API_BASE_URL + `/post/search/${hashtag}/${page + 1}`,
