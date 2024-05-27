@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import AppHeader from "../common/AppHeader";
 import Home from "../home/Home";
+import SearchResult from "../home/SearchResult";
 import DetailPage from '../detail/DetailPage';
 import ListPage from '../list/ListPage';
 import Login from "../user/login/Login";
@@ -96,6 +97,7 @@ class App extends Component {
         <div className="app-top-box">
           <AppHeader
             authenticated={this.state.authenticated}
+            currentUser={this.state.currentUser}
             onLogout={this.handleLogout}
             //onSearch={this.handleSearch}
           />
@@ -103,8 +105,14 @@ class App extends Component {
         <div className="app-body">
           <Switch>
             <Route exact path="/" component={Home}></Route>
+            <Route exact path="/search/:hashtag/:page/:order" component={SearchResult}></Route>
             <Route exact path="/detail/:postId" component={DetailPage}></Route>
-            <Route path="/list/:hashtag/:page" component={ListPage} />
+            <Route
+              path="/list/:hashtag/:page"
+              render={(props) => (
+                <ListPage {...props} authenticated={this.state.authenticated} currentUser={this.state.currentUser} />
+              )}
+            />
             <PrivateRoute
               path="/profile"
               authenticated={this.state.authenticated}
@@ -121,7 +129,7 @@ class App extends Component {
               path="/oauth2/redirect"
               component={OAuth2RedirectHandler}
             ></Route>
-            <Route component={NotFound}></Route>
+            {/* <Route component={NotFound}></Route> */}
           </Switch>
         </div>
         <Alert
