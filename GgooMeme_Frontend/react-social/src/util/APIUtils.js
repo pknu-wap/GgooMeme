@@ -56,4 +56,10 @@ export const fetchImagesByHashtags = (hashtag, page) => {
     });
   };
 
+  export function relatedImages(Id, page) {
+    return request({
+        url: API_BASE_URL + `/post/related/${Id}/${page}`,
+        method: "GET",
+    });
+  };
 
