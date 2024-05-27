@@ -37,7 +37,6 @@ class App extends Component {
     });
   };
 
-
   loadCurrentUser = () => {
     const token = localStorage.getItem(ACCESS_TOKEN);
     if (!token) {
@@ -46,19 +45,20 @@ class App extends Component {
     }
 
     getCurrentUser()
-      .then(response => {
+      .then((response) => {
         this.setState({
           currentUser: response,
           authenticated: true,
-          loading: false
+          loading: false,
         });
-      }).catch(error => {
+      })
+      .catch((error) => {
         this.setState({
-          loading: false
+          loading: false,
         });
         console.error("Error fetching current user:", error);
       });
-  }
+  };
 
   handleLogout() {
     localStorage.removeItem(ACCESS_TOKEN);
@@ -67,7 +67,7 @@ class App extends Component {
       currentUser: null,
     });
     Alert.success("You're safely logged out!");
-    this.props.history.push('/login');
+    this.props.history.push("/login");
   }
 
   handleSearch = (searchTerm, page) => {
@@ -139,8 +139,17 @@ class App extends Component {
             ></Route>
             <Route
               path="/oauth2/redirect"
+              render={(props) => (
+                <OAuth2RedirectHandler
+                  {...props}
+                  onLogin={this.loadCurrentUser}
+                />
+              )}
+            />
+            {/* <Route
+              path="/oauth2/redirect"
               component={OAuth2RedirectHandler}
-            ></Route>
+            ></Route> */}
             {/* <Route component={NotFound}></Route> */}
           </Switch>
         </div>

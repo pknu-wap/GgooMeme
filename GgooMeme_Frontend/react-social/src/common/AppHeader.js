@@ -17,7 +17,6 @@ class AppHeader extends Component {
   componentDidMount() {
     // 컴포넌트가 mount될 때 현재 경로에 따라 이전 검색어를 가져옴
     this.updateSearchTerm();
-    this.loadCurrentUser();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -29,31 +28,7 @@ class AppHeader extends Component {
       this.updateSearchTerm();
     }
   }
-  // 현재 사용자 정보를 가져오는 함수
-  // getCurrentUser = () => {
-  //   getCurrentUser()
-  //     .then((response) => {
-  //       this.setState({
-  //         currentUser: response, // 가져온 사용자 정보를 상태에 저장
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching current user:", error);
-  //     });
-  // };
 
-  loadCurrentUser = () => {
-    const token = localStorage.getItem(ACCESS_TOKEN);
-    if (!token) return;
-
-    getCurrentUser()
-      .then(response => {
-        this.setState({ currentUser: response });
-        this.props.setCurrentUser(response); // 부모 컴포넌트에 사용자 정보 설정
-      }).catch(error => {
-        console.error('Error fetching current user:', error);
-      });
-  };
 
   // 현재 경로에 따라 검색어 업데이트
   updateSearchTerm() {

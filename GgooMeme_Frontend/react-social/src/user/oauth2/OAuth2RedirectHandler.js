@@ -17,6 +17,7 @@ class OAuth2RedirectHandler extends Component {
 
         if(token) {
             localStorage.setItem(ACCESS_TOKEN, token);
+            this.props.onLogin();
             return <Redirect to={{
                 pathname: "/", //유요한 토큰일 경우 메인페이지
                 state: { from: this.props.location }
