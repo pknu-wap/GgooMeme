@@ -40,7 +40,7 @@ class ListPage extends Component {
         this.fetchImagesByHashtags(hashtag, 0); // Reset to first page
       });
     } else {
-      this.setState({ hashtag: null }, () => {
+      this.setState({ hashtag: null, postPreviewDtos: [], page: 0 }, () => {
         this.fetchPostData(0, "랜덤순"); // Reset to first page
       });
     }

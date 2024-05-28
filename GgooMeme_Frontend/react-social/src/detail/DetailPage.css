@@ -1,0 +1,102 @@
+* {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .detail-container {
+    display: flex;
+    flex-direction: column;
+    padding-left: 60px;
+    padding-top: 80px;
+    padding-bottom: 60px;
+  }
+
+  .detail-info {
+    display: flex;
+    align-items: center; /*세로 정렬 조정 */
+    justify-content: space-around;
+    padding: 30px;
+  }
+  
+  .post-image img {
+    max-width: 100%; 
+    height: auto;
+    /* max-width: 300px;
+    max-height: 300px; */
+  }
+  
+  .post-info {
+    margin-left: 20px; /* 이미지와 정보 사이의 간격 조정 */
+  }
+
+  .related-images {
+    width: 100%;
+    /* max-width: 1500px; */
+    overflow: hidden;
+    position: relative;
+    /* margin-top: 50px; */
+  }
+  
+  .slider-container {
+    display: flex;
+    align-items: center;
+    /* width: 100%;
+    overflow: hidden; */
+    position: relative; /* 버튼의 위치를 조정하기 위해 relative로 설정 */
+  }
+
+  .related-images-wrapper {
+    overflow: hidden;
+    width: 100%;
+    margin: 0 40px; /* 버튼과의 공간을 위해 양쪽에 마진 추가 */
+  }
+  
+  .related-images-list {
+    display: flex;
+    transition: transform 0.3s ease-in-out; /* 부드러운 슬라이드 효과 */
+    width: calc(20% * 5); /* 한 화면에 5개의 이미지가 나오도록 수정 */
+  }
+  
+  .related-image-item {
+    flex: 0 0 15%; /* 한 화면에 5개의 이미지를 보여주기 위해 설정 */
+    box-sizing: border-box;
+    padding: 5px;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .related-image-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    padding: 20px;
+  }
+
+  .related-image-item:hover {
+    /* transform: scale(1.05); */
+    transform: translateY(-5px);
+  }
+
+  .prev-button, .next-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .prev-button {
+    left: 0;
+  }
+  
+  .next-button {
+    right: 0;
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    z-index:1;
+  }
