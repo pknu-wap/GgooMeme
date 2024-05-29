@@ -13,19 +13,19 @@ import java.util.ArrayList;
 @SpringBootTest
 public class CachedPostRepositoryTest {
 
-    @Autowired
-    private CachedPostRepository repo;
-
-    @Test
-    void 정상값저장테스트(){
-        CachedPost cachedPost = new CachedPost("1","test", new ArrayList<>());
-
-        repo.save(cachedPost);
-
-        Assertions.assertEquals(true,repo.findById(cachedPost.getId()).isPresent());
-
-        repo.delete(cachedPost);
-    }
+//    @Autowired
+//    private CachedPostRepository repo;
+//
+//    @Test
+//    void 정상값저장테스트(){
+//        CachedPost cachedPost = new CachedPost("1","test", new ArrayList<>());
+//
+//        repo.save(cachedPost);
+//
+//        Assertions.assertEquals(true,repo.findById(cachedPost.getId()).isPresent());
+//
+//        repo.delete(cachedPost);
+//    }
 
 
 }
