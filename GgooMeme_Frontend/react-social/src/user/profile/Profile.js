@@ -7,24 +7,26 @@ class Profile extends Component {
         console.log(props);
     }
     render() {
+        const { currentUser } = this.props;
+
         return (
             <div className="profile-container">
                 <div className="container">
                     <div className="profile-info">
                         <div className="profile-avatar">
                             { 
-                                this.props.currentUser && this.props.currentUser.imageUrl ? (
-                                    <img src={this.props.currentUser.imageUrl} alt={this.props.currentUser.name}/>
+                                currentUser && currentUser.imageUrl ? (
+                                    <img src={currentUser.imageUrl} alt={currentUser.name}/>
                                 ) : (
                                     <div className="text-avatar">
-                                        <span>{this.props.currentUser && this.props.currentUser.name ? this.props.currentUser.name : ""}</span>
+                                        <span>{currentUser && currentUser.name ? this.props.currentUser.name : ""}</span>
                                     </div>
                                 )
                             }
                         </div>
                         <div className="profile-name">
-                           <h2>{this.props.currentUser && this.props.currentUser.name ? this.props.currentUser.name : "avatar"}님, 안녕하세요</h2>
-                           <p className="profile-email">{this.props.currentUser && this.props.currentUser.email ? this.props.currentUser.email : ""}</p>
+                           <h2>{currentUser && currentUser.name ? currentUser.name : "avatar"}님, 안녕하세요</h2>
+                           <p className="profile-email">{currentUser && currentUser.email ? currentUser.email : ""}</p>
                         </div>
                     </div>
                 </div>    
