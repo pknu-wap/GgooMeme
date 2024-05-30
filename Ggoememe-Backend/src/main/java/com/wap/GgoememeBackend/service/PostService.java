@@ -89,7 +89,7 @@ public class PostService {
 
 
 
-    //@Cacheable(cacheNames = "searchPosts", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
+    @Cacheable(cacheNames = "searchPosts", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
     public SearchPostResponse searchPosts(String tag, int page){
         PageRequest pageRequest = PageRequest.of(page - 1, 20, Sort.by("id").descending());
         Page<Post> pageOfPosts = postRepository.findByTags(tag, pageRequest);
