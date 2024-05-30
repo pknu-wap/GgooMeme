@@ -15,6 +15,7 @@ class DetailPage extends Component {
       loading: true,
       error: null,
       currentPage: 0, // 슬라이드의 현재 페이지
+      isBookmarked: false,
     };
   }
 
@@ -48,6 +49,7 @@ class DetailPage extends Component {
         console.log("Received post info:", data);
         this.setState({
           postInfo: data,
+          isBookmarked: data.bookmarked, // 서버에서 받아온 북마크 상태로 초기화
           loading: false,
           error: null,
         });
@@ -93,8 +95,39 @@ class DetailPage extends Component {
     }));
   };
 
+  toggleBookmark = async () => {
+    const { postId, isBookmarked } = this.state;
+    const newBookmarkState = !isBookmarked;
+
+    try {
+        const response = await request({
+            url: `${API_BASE_URL}/post/bookmark/${postId}`,
+            method: "PUT",
+            body: JSON.stringify({ bookmarked: newBookmarkState }),
+        });
+
+        let responseData;
+        try {
+            responseData = JSON.parse(response);
+        } catch (error) {
+            responseData = response;
+        }
+
+        if (response.ok || responseData === "add bookmark" || responseData === "remove bookmark") {
+            this.setState({ isBookmarked: newBookmarkState }, () => {
+                console.log("Bookmark state updated:", this.state.isBookmarked);
+            });
+        } else {
+            console.error(`Error updating bookmark state: ${response.status} ${responseData}`);
+        }
+    } catch (error) {
+        console.error("Error updating bookmark state:", error);
+    }
+};
+
+
   render() {
-    const { postInfo, relatedImages, loading, error, currentPage } = this.state;
+    const { postInfo, relatedImages, loading, error, currentPage, isBookmarked } = this.state;
 
     if (loading) {
       return <div className="loading">Loading...</div>;
@@ -120,14 +153,16 @@ class DetailPage extends Component {
             <img src={postInfo.image} alt={`Post ${postInfo.postId}`} />
           </div>
           <div className="post-info">
-            <p>Post ID: {postInfo.postId}</p>
-            <p>
-              Tags:{" "}
-              {postInfo.tags ? postInfo.tags.join(", ") : "No tags available"}
-            </p>
             <p>Likes: {postInfo.likes}</p>
-            <p>Bookmarked: {postInfo.bookmarked ? "Yes" : "No"}</p>
+            <div className="bookmark-icon" onClick={this.toggleBookmark}>
+              <BookmarkIcon filled={isBookmarked} />
+            </div>
           </div>
+        </div>
+        <div className="image-tag">
+          {postInfo.tags
+            ? postInfo.tags.map((tag, index) => <span key={index}>{tag}</span>)
+            : "No tags available"}
         </div>
         <div className="related-images">
           <h2>연관 이미지</h2>
@@ -171,5 +206,20 @@ class DetailPage extends Component {
     );
   }
 }
+
+const BookmarkIcon = ({ filled }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill={filled ? "#ffd700" : "none"}
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="bookmark-icon"
+  >
+    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+  </svg>
+);
 
 export default withRouter(DetailPage);

@@ -11,6 +11,27 @@ class OAuth2RedirectHandler extends Component {
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     };
 
+    // requestKakaoAccessToken(code) {
+    //     const KAKAO_CLIENT_ID = process.env.REACT_APP_KAKAO_CLIENT_ID;
+    //     const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI;
+    //     const KAKAO_APP_KEY = process.env.REACT_APP_KAKAO_API_KEY;
+
+    //     fetch(`https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${KAKAO_CLIENT_ID}&redirect_uri=http://localhost:3000/oauth2/callback/kakao&code=${code}`, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/x-www-form-urlencoded'
+    //         }
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         localStorage.setItem(ACCESS_TOKEN, data.access_token);
+    //         this.props.onLogin();
+    //     })
+    //     .catch(error => {
+    //         console.error('Error fetching Kakao access token:', error);
+    //     });
+    // }
+
     render() {        
         const token = this.getUrlParameter('token');
         const error = this.getUrlParameter('error');

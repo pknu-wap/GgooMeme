@@ -9,6 +9,7 @@
     padding-left: 60px;
     padding-top: 80px;
     padding-bottom: 60px;
+    padding-right: 30px;
   }
 
   .detail-info {
@@ -26,7 +27,12 @@
   }
   
   .post-info {
+    display:flex;
     margin-left: 20px; /* 이미지와 정보 사이의 간격 조정 */
+  }
+
+  .post-info p {
+    margin: 10px;
   }
 
   .related-images {
@@ -34,7 +40,7 @@
     /* max-width: 1500px; */
     overflow: hidden;
     position: relative;
-    /* margin-top: 50px; */
+    margin-top: 50px;
   }
   
   .slider-container {
@@ -80,7 +86,7 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(72, 135, 218, 0.5);
     color: white;
     border: none;
     padding: 10px;
@@ -94,9 +100,43 @@
   .next-button {
     right: 0;
   }
+  .prev-button:hover, .next-button:hover{
+    background-color: rgba(17, 44, 116, 0.5);
+  }
 
   button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
     z-index:1;
+  }
+
+  .image-tag {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* 태그 간 간격 추가 */
+    margin-top: 10px;
+  }
+  
+  .image-tag span {
+    background-color: rgb(237,245,254);
+    border-radius: 50%;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor:pointer;
+  }
+
+  .image-tag span:hover {
+    transform: scale(1.05)
+  }
+
+  .bookmark-icon {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    margin-top: 10px;
+    transition: fill 0.2s ease-in-out;
   }

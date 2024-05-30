@@ -221,6 +221,12 @@ class Home extends Component {
 
   handleMoreClick = () => {
     const { hashtag, page, order } = this.state;
+    if (hashtag) {
+      this.fetchImagesByHashtags(hashtag, page);
+    } else {
+      this.fetchPostData(page, order);
+    }
+
     this.props.history.push(`/list/${hashtag}/${page + 1}`);
   }
 
