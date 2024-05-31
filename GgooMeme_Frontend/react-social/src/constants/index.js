@@ -2,9 +2,9 @@
 export const API_BASE_URL = 'https://backendu.com';
 export const ACCESS_TOKEN = 'accessToken';
 
-export const OAUTH2_REDIRECT_URI = 'https://backendu.com/oauth2/redirect';
+//export const OAUTH2_REDIRECT_URI = 'https://backendu.com/oauth2/redirect';
 //export const OAUTH2_REDIRECT_URI = 'http://localhost:3000/oauth2/redirect'; //나중에 배포 주소(backendu)로 바꿔야함
-//export const OAUTH2_REDIRECT_URI = 'https://web-ggoomeme-1pgyr2mlvkuyw16.sel5.cloudtype.app/oauth2/redirect';
+export const OAUTH2_REDIRECT_URI = 'https://web-ggoomeme-1pgyr2mlvkuyw16.sel5.cloudtype.app/oauth2/redirect';
 
 
 export const GOOGLE_AUTH_URL = API_BASE_URL + '/oauth2/authorization/google?redirect_uri=' + OAUTH2_REDIRECT_URI;
