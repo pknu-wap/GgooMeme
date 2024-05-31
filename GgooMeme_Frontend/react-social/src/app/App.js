@@ -5,6 +5,7 @@ import Home from "../home/Home";
 import SearchResult from "../home/SearchResult";
 import DetailPage from "../detail/DetailPage";
 import ListPage from "../list/ListPage";
+import ListHomePage from "../list/ListHomePage";
 import Login from "../user/login/Login";
 import Profile from "../user/profile/Profile";
 import OAuth2RedirectHandler from "../user/oauth2/OAuth2RedirectHandler";
@@ -109,6 +110,7 @@ class App extends Component {
               component={SearchResult}
             ></Route>
             <Route exact path="/detail/:postId" component={DetailPage}></Route>
+            <Route exact path="/list/home/:page" component={ListHomePage}></Route>
             <Route
               path="/list/:hashtag/:page"
               render={(props) => (

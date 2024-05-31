@@ -34,6 +34,7 @@ class Home extends Component {
     const page = parseInt(urlParams.get("page")) || 1;
     const hashtag = urlParams.get("hashtag") || "";
     const order = urlParams.get("order") || "랜덤순";
+    // const {page, order} = this.state;
 
     this.setState({ page, hashtag, order }, () => {
       if (hashtag) {
@@ -111,12 +112,15 @@ class Home extends Component {
 
   // 이미지 정보 가져오기(처음 렌더링 시)
   fetchPostData(page, order) {
+    const url = `${API_BASE_URL}/post/main/${page}/${order}`;
+    console.log("Fetching data from:", url); // 추가된 디버그 로그
     request({
-      url: API_BASE_URL + `/post/main/${page}/${order}`,
+      url: url,
       method: "GET",
     })
       .then((data) => {
-        if (this._isMounted) { // 컴포넌트가 여전히 마운트된 경우에만 상태 업데이트
+        console.log("Received data:", data); // 추가된 디버그 로그
+        if (this._isMounted) {
           this.setState({
             postPreviewDtos: data.postDtos.postPreviewDtos,
             hasNext: data.hasNext,
@@ -128,7 +132,7 @@ class Home extends Component {
         }
       })
       .catch((error) => {
-        if (this._isMounted) { // 컴포넌트가 여전히 마운트된 경우에만 상태 업데이트
+        if (this._isMounted) {
           this.setState({
             loading: false,
             error: error.message,
@@ -136,6 +140,7 @@ class Home extends Component {
         }
       });
   }
+  
 
   fetchImagesByHashtags = (hashtag, page) => {
     fetchImagesByHashtags(hashtag, page)
@@ -164,16 +169,20 @@ class Home extends Component {
 
   // 드롭다운 메뉴
   handleItemClick = (label) => {
+    const randomPage = label === "랜덤순" ? Math.floor(Math.random() * 100) + 1 : 1;
     this.setState(
       {
         selectedOption: label,
         isExpanded: false,
         order: label, // 선택된 옵션을 order로 설정
+        page: randomPage
       },
       () => {
         // 선택된 옵션에 따라 데이터를 다시 불러옴
         const { page, hashtag } = this.state;
-        this.fetchPostData(page, label);
+        console.log("Selected order:", label);
+        console.log("Page number:", randomPage);
+        this.fetchPostData(randomPage, label);
         //this.pushHistory(page, hashtag, label); // 히스토리 업데이트
       }
     );
@@ -218,10 +227,12 @@ class Home extends Component {
     const { hashtag, page, order } = this.state;
     if (hashtag) {
       this.fetchImagesByHashtags(hashtag, page);
+      this.props.history.push(`/list/${hashtag}/${page+1}`);
     } else {
       this.fetchPostData(page, order);
+      this.props.history.push(`/list/home/${page}`);
     }
-    this.props.history.push(`/list/${hashtag}/${page}`);
+    //this.props.history.push(`/list/${hashtag}/${page+1}`);
   }
 
   render() {
