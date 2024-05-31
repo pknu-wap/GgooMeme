@@ -22,10 +22,11 @@ class Home extends Component {
       isExpanded: false, // 드롭다운이 열려있는지 여부
       order: "랜덤순", // 정렬 순서
     };
+    this._isMounted = false;
   }
 
   componentDidMount() {
-    this.mounted = true;
+    this._isMounted = true;
     window.addEventListener("resize", this.handleResize);
     window.addEventListener("popstate", this.handlePopState);
 
@@ -33,16 +34,6 @@ class Home extends Component {
     const page = parseInt(urlParams.get("page")) || 1;
     const hashtag = urlParams.get("hashtag") || "";
     const order = urlParams.get("order") || "랜덤순";
-
-    //const urlParams = new URLSearchParams(window.location.search);
-    // const { page, order } = this.state;
-    // const { hashtag } = this.state;
-    // // this.fetchPostData(page, order);
-    // // this.fetchImagesByHashtags(hashtag, page);
-    // window.addEventListener("popstate", this.handlePopState);
-
-    // 페이지 로딩 시 히스토리에 현재 페이지 정보 추가
-    //const currentPage = parseInt(urlParams.get("page")) || 0;
 
     this.setState({ page, hashtag, order }, () => {
       if (hashtag) {
@@ -54,7 +45,7 @@ class Home extends Component {
   }
 
   componentWillUnmount() {
-    this.mounted = false;
+    this._isMounted = false;
     window.removeEventListener("resize", this.handleResize);
     window.removeEventListener("popstate", this.handlePopState);
   }
@@ -125,21 +116,24 @@ class Home extends Component {
       method: "GET",
     })
       .then((data) => {
-        console.log("Received data:", data);
-        this.setState({
-          postPreviewDtos: data.postDtos.postPreviewDtos,
-          hasNext: data.hasNext,
-          loading: false,
-          error: null,
-          page: page,
-          order: order,
-        });
+        if (this._isMounted) { // 컴포넌트가 여전히 마운트된 경우에만 상태 업데이트
+          this.setState({
+            postPreviewDtos: data.postDtos.postPreviewDtos,
+            hasNext: data.hasNext,
+            loading: false,
+            error: null,
+            page: page,
+            order: order,
+          });
+        }
       })
       .catch((error) => {
-        this.setState({
-          loading: false,
-          error: error.message,
-        });
+        if (this._isMounted) { // 컴포넌트가 여전히 마운트된 경우에만 상태 업데이트
+          this.setState({
+            loading: false,
+            error: error.message,
+          });
+        }
       });
   }
 
@@ -147,18 +141,19 @@ class Home extends Component {
     fetchImagesByHashtags(hashtag, page)
       .then((data) => {
         console.log("Received images:", data);
-        if (this.mounted) { // 컴포넌트가 마운트된 경우에만 상태 업데이트
+        if (this._isMounted) { // 컴포넌트가 마운트된 경우에만 상태 업데이트
           this.setState({
             postPreviewDtos: data.postDtos.postPreviewDtos,
             hasNext: data.hasNext,
             loading: false,
             error: null,
             page: page,
+            hashtag: hashtag,
           });
         }
       })
       .catch((error) => {
-        if (this.mounted) { // 컴포넌트가 마운트된 경우에만 상태 업데이트
+        if (this._isMounted) { // 컴포넌트가 마운트된 경우에만 상태 업데이트
           this.setState({
             loading: false,
             error: error.message,
@@ -226,8 +221,7 @@ class Home extends Component {
     } else {
       this.fetchPostData(page, order);
     }
-
-    this.props.history.push(`/list/${hashtag}/${page + 1}`);
+    this.props.history.push(`/list/${hashtag}/${page}`);
   }
 
   render() {

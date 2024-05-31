@@ -16,6 +16,11 @@ class DetailPage extends Component {
       error: null,
       currentPage: 0, // 슬라이드의 현재 페이지
       isBookmarked: false,
+      replies: [], // 댓글 목록
+      replyContent: "", // 새로운 댓글 내용
+      replyLoading: false, // 댓글 로딩 상태
+      hasMoreReplies: true, // 댓글 페이징 여부
+      replyPage: 0, // 현재 댓글 페이지
     };
   }
 
@@ -25,6 +30,7 @@ class DetailPage extends Component {
       this.setState({ postId }, () => {
         this.fetchPostInfo();
         this.fetchRelatedImages();
+        this.fetchReplies();
       });
     }
   }
@@ -38,6 +44,59 @@ class DetailPage extends Component {
       });
     }
   }
+
+  fetchReplies = (page = 0) => {
+    const { postId } = this.state;
+    request({
+      url: `${API_BASE_URL}/reply/${postId}/${page}`,
+      method: "GET",
+    })
+      .then((data) => {
+        this.setState((prevState) => ({
+          replies:
+            page === 0 ? data.replies : [...prevState.replies, ...data.replies],
+          replyLoading: false,
+          error: null,
+          hasMoreReplies: data.hasNext,
+          replyPage: page,
+        }));
+      })
+      .catch((error) => {
+        this.setState({
+          replyLoading: false,
+          error: error.message,
+        });
+      });
+  };
+
+  submitReply = () => {
+    const { postId, replyContent } = this.state;
+    if (!replyContent.trim()) {
+      return;
+    }
+
+    this.setState({ replyLoading: true });
+
+    request({
+      url: `${API_BASE_URL}/reply`,
+      method: "POST",
+      body: JSON.stringify({ postId, text: replyContent }),
+    })
+      .then(() => {
+        this.setState({ replyContent: "" });
+        this.fetchReplies(); // 댓글 작성 후 댓글 목록 갱신
+      })
+      .catch((error) => {
+        this.setState({
+          replyLoading: false,
+          error: error.message,
+        });
+      });
+  };
+
+  handleReplyChange = (event) => {
+    this.setState({ replyContent: event.target.value });
+  };
 
   fetchPostInfo = () => {
     const { postId } = this.state;
@@ -100,34 +159,51 @@ class DetailPage extends Component {
     const newBookmarkState = !isBookmarked;
 
     try {
-        const response = await request({
-            url: `${API_BASE_URL}/post/bookmark/${postId}`,
-            method: "PUT",
-            body: JSON.stringify({ bookmarked: newBookmarkState }),
+      const response = await request({
+        url: `${API_BASE_URL}/post/bookmark/${postId}`,
+        method: "PUT",
+        body: JSON.stringify({ bookmarked: newBookmarkState }),
+      });
+
+      let responseData;
+      try {
+        responseData = JSON.parse(response);
+      } catch (error) {
+        responseData = response;
+      }
+
+      if (
+        response.ok ||
+        responseData === "add bookmark" ||
+        responseData === "remove bookmark"
+      ) {
+        this.setState({ isBookmarked: newBookmarkState }, () => {
+          console.log("Bookmark state updated:", this.state.isBookmarked);
         });
-
-        let responseData;
-        try {
-            responseData = JSON.parse(response);
-        } catch (error) {
-            responseData = response;
-        }
-
-        if (response.ok || responseData === "add bookmark" || responseData === "remove bookmark") {
-            this.setState({ isBookmarked: newBookmarkState }, () => {
-                console.log("Bookmark state updated:", this.state.isBookmarked);
-            });
-        } else {
-            console.error(`Error updating bookmark state: ${response.status} ${responseData}`);
-        }
+      } else {
+        console.error(
+          `Error updating bookmark state: ${response.status} ${responseData}`
+        );
+      }
     } catch (error) {
-        console.error("Error updating bookmark state:", error);
+      console.error("Error updating bookmark state:", error);
     }
-};
-
+  };
 
   render() {
-    const { postInfo, relatedImages, loading, error, currentPage, isBookmarked } = this.state;
+    const {
+      postInfo,
+      relatedImages,
+      loading,
+      error,
+      currentPage,
+      isBookmarked,
+      replies,
+      replyContent,
+      replyLoading,
+      hasMoreReplies,
+      replyPage,
+    } = this.state;
 
     if (loading) {
       return <div className="loading">Loading...</div>;
@@ -141,7 +217,6 @@ class DetailPage extends Component {
       return <div>No post information available.</div>;
     }
 
-    // 현재 페이지의 이미지들만 슬라이스하여 보여줍니다.
     const startIndex = currentPage * 5;
     const endIndex = startIndex + 5;
     const currentImages = relatedImages.slice(startIndex, endIndex);
@@ -153,9 +228,43 @@ class DetailPage extends Component {
             <img src={postInfo.image} alt={`Post ${postInfo.postId}`} />
           </div>
           <div className="post-info">
-            <p>Likes: {postInfo.likes}</p>
-            <div className="bookmark-icon" onClick={this.toggleBookmark}>
-              <BookmarkIcon filled={isBookmarked} />
+            <div className="likes-bookmarked">
+              <p>Likes: {postInfo.likes}</p>
+              <div className="bookmark-icon" onClick={this.toggleBookmark}>
+                <BookmarkIcon filled={isBookmarked} />
+              </div>
+            </div>
+            <div className="reply-container">
+              <h3>댓글</h3>
+              <div className="replies-list">
+                {replies.length > 0 ? (
+                  replies.map((reply, index) => (
+                    <div key={index} className="reply-item">
+                      <p>{reply}</p>
+                    </div>
+                  ))
+                ) : (
+                  <p>댓글이 없습니다.</p>
+                )}
+              </div>
+              {hasMoreReplies && (
+                <button
+                  onClick={() => this.fetchReplies(replyPage + 1)}
+                  disabled={replyLoading}
+                >
+                  {replyLoading ? "불러오는 중..." : "더 불러오기"}
+                </button>
+              )}
+              <div className="reply-input">
+                <textarea
+                  value={replyContent}
+                  onChange={this.handleReplyChange}
+                  placeholder="댓글을 작성하세요..."
+                />
+                <button onClick={this.submitReply} disabled={replyLoading}>
+                  {replyLoading ? "작성 중..." : "댓글 작성"}
+                </button>
+              </div>
             </div>
           </div>
         </div>

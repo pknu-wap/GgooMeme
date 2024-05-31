@@ -25,10 +25,19 @@
     /* max-width: 300px;
     max-height: 300px; */
   }
+
+  .likes-bookmarked {
+    display:flex;
+    margin-left: 20px; /* 이미지와 정보 사이의 간격 조정 */
+    align-items:center;
+    justify-content: center;
+  }
   
   .post-info {
     display:flex;
-    margin-left: 20px; /* 이미지와 정보 사이의 간격 조정 */
+    align-items:center;
+    justify-content: center;
+    flex-direction: column;
   }
 
   .post-info p {
@@ -49,6 +58,7 @@
     /* width: 100%;
     overflow: hidden; */
     position: relative; /* 버튼의 위치를 조정하기 위해 relative로 설정 */
+    padding-top: 15px;
   }
 
   .related-images-wrapper {
@@ -66,7 +76,7 @@
   .related-image-item {
     flex: 0 0 15%; /* 한 화면에 5개의 이미지를 보여주기 위해 설정 */
     box-sizing: border-box;
-    padding: 5px;
+    padding: 6px;
     transition: transform 0.3s ease-in-out;
   }
 
@@ -91,14 +101,15 @@
     border: none;
     padding: 10px;
     cursor: pointer;
+    border-radius: 20px;
   }
   
   .prev-button {
-    left: 0;
+    left: 0px;
   }
   
   .next-button {
-    right: 0;
+    right: 0px;
   }
   .prev-button:hover, .next-button:hover{
     background-color: rgba(17, 44, 116, 0.5);
@@ -137,6 +148,5 @@
     cursor: pointer;
     width: 24px;
     height: 24px;
-    margin-top: 10px;
     transition: fill 0.2s ease-in-out;
   }
