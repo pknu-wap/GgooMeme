@@ -53,7 +53,10 @@ public class PostService {
                 isBookmarked=true;
             }
         }
+        List<PostBookmarkedUser> list = postBookmarkedUserRepository.findPostBookmarkedUsersByPostId(postId);
+
         PostDto postDto = PostDto.of(post);
+        postDto.setBookmarkedCount(list.size());
         postDto.setBookmarked(isBookmarked);
         return postDto;
     }
