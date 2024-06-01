@@ -164,7 +164,7 @@ class ListHomePage extends Component {
       </div>
       {isFetching && <div>Loading more...</div>}
       {!isFetching && hasNext && (
-        <button className="load-more"onClick={this.loadMorePosts}>Load More</button>
+        <button className="load-more"onClick={this.loadMorePosts}>더보기</button>
       )}
     </div>
     );

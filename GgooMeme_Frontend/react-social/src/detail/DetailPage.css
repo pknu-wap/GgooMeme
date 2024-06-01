@@ -150,3 +150,68 @@
     height: 24px;
     transition: fill 0.2s ease-in-out;
   }
+
+  .post-image img{
+    margin: 20px;
+    max-width: 900px;
+  }
+
+  .post-info {
+    margin: 40px;
+    border: 1px solid;
+    border-radius: 20px;
+    padding: 15px;
+    border: 3px solid rgb(139, 184, 223);
+  }
+
+  .reply-container {
+    margin-top: 30px;
+  }
+
+  .reply-container h3 {
+    margin-bottom: 10px;
+  }
+
+  .reply-box{
+    margin: 20px 20px 0px 0px;
+    padding: 5px;
+    border-radius: 5px;
+  }
+
+  .reply-submit {
+    /* margin: 10px 10px 10px 0px; */
+    margin-top:40px;
+    padding: 4px;
+    border: 1px solid;
+    border-radius: 5px;
+    background-color: aliceblue;
+    cursor:pointer;
+  }
+
+  .prev-reply-loading {
+    background-color: aliceblue;
+    margin-top: 20px;
+    padding:4px;
+    border: 1px solid;
+    border-radius: 4px;
+    font-size: 11px;
+    cursor:pointer;
+  }
+
+  .reply-submit:hover, .prev-reply-loading:hover{
+    background-color: rgb(132, 196, 226);
+  }
+
+  .reply-input {
+    display: flex;
+  }
+  .reply-input textarea {
+    height: 50px;
+  }
+
+  /* 댓글 스크롤 */
+  .replies-list {
+    max-height: 150px; /* 댓글 3개 높이에 맞게 설정 */
+    overflow-y: auto;
+  }
+  

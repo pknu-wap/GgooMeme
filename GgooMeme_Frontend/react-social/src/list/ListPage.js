@@ -41,7 +41,7 @@ class ListPage extends Component {
       });
     } else {
       this.setState({ hashtag: null, postPreviewDtos: [], page: 0 }, () => {
-        this.fetchPostData(0, "랜덤순"); // Reset to first page
+        this.fetchPostData(0, "random"); // Reset to first page
       });
     }
   }
@@ -64,7 +64,7 @@ class ListPage extends Component {
     if (hashtag) {
       this.fetchImagesByHashtags(hashtag, page + 1);
     } else {
-      this.fetchPostData(page + 1, "랜덤순");
+      this.fetchPostData(page + 1, "random");
     }
   };
   
@@ -186,7 +186,7 @@ class ListPage extends Component {
       </div>
       {isFetching && <div>Loading more...</div>}
       {!isFetching && hasNext && (
-        <button className="load-more"onClick={this.loadMorePosts}>Load More</button>
+        <button className="load-more"onClick={this.loadMorePosts}>더보기</button>
       )}
     </div>
     );
