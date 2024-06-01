@@ -39,11 +39,6 @@ class Login extends Component {
                 <div className="login-content">
                     <h1 className="login-title">Login with Social</h1>
                     <SocialLogin />
-                    {/* <div className="or-separator">
-                        <span className="or-text">OR</span>
-                    </div>
-                    <LoginForm {...this.props} /> */}
-                    {/* <span className="signup-link">아직 회원이 아니신가요? <Link to="/signup">Sign up!</Link></span> */}
                 </div>
             </div>
         );

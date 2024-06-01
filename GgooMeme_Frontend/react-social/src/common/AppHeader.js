@@ -39,8 +39,11 @@ class AppHeader extends Component {
         searchTerm: parts[2],
         page: parts[3],
       });
+    } else if (currentPath === "/home") {
+      this.setState({ searchTerm: "", page: 0 });
     }
   }
+  
 
   // 입력값 변경 핸들러
   handleInputChange = (event) => {

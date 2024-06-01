@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { request } from "../util/APIUtils";
 import { API_BASE_URL } from "../constants";
 import "./ListPage.css";
-import { fetchImagesByHashtags } from "../util/APIUtils";
 
-class ListPage extends Component {
+
+class ListHomePage extends Component {
   state = {
     postPreviewDtos: [],
     loading: true,
@@ -17,7 +17,7 @@ class ListPage extends Component {
   };
 
   componentDidMount() {
-    this.updateSearchTerm();
+    this.fetchPostData(1, "random");
     window.addEventListener("resize", this.handleResize);
     window.addEventListener("scroll", this.handleScroll);
   }
@@ -30,19 +30,6 @@ class ListPage extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.location.pathname !== this.props.location.pathname && this.props.location.pathname.includes("/list/")) {
       this.updateSearchTerm();
-    }
-  }
-
-  updateSearchTerm() {
-    const { hashtag } = this.props.match.params;
-    if (hashtag && hashtag !== "null") {
-      this.setState({ hashtag }, () => {
-        this.fetchImagesByHashtags(hashtag, 0); // Reset to first page
-      });
-    } else {
-      this.setState({ hashtag: null, postPreviewDtos: [], page: 0 }, () => {
-        this.fetchPostData(0, "random"); // Reset to first page
-      });
     }
   }
 
@@ -61,11 +48,12 @@ class ListPage extends Component {
   loadMorePosts = () => {
     const { hashtag, page } = this.state;
     this.setState({ isFetching: true });
-    if (hashtag) {
-      this.fetchImagesByHashtags(hashtag, page + 1);
-    } else {
-      this.fetchPostData(page + 1, "random");
-    }
+    this.fetchPostData(page + 1, "랜덤순");
+    // if (hashtag) {
+    //   this.fetchImagesByHashtags(hashtag, page + 1);
+    // } else {
+    //   this.fetchPostData(page + 1, "랜덤순");
+    // }
   };
   
   handleResize = () => {
@@ -99,15 +87,26 @@ class ListPage extends Component {
       method: "GET",
     })
       .then((data) => {
-        this.setState((prevState) => ({
-          postPreviewDtos: [...prevState.postPreviewDtos, ...data.postDtos.postPreviewDtos],
-          hasNext: data.hasNext,
-          loading: false,
-          isFetching: false,
-          error: null,
-          page: page,
-          order: order,
-        }));
+        this.setState((prevState) => {
+          // Set을 이용해 중복된 postId를 제거
+          const uniquePosts = [
+            ...new Map(
+              [...prevState.postPreviewDtos, ...data.postDtos.postPreviewDtos].map(
+                (post) => [post.postId, post]
+              )
+            ).values(),
+          ];
+          
+          return {
+            postPreviewDtos: uniquePosts,
+            hasNext: data.hasNext,
+            loading: false,
+            isFetching: false,
+            error: null,
+            page: page,
+            order: order,
+          };
+        });
       })
       .catch((error) => {
         this.setState({
@@ -117,27 +116,6 @@ class ListPage extends Component {
         });
       });
   }
-  
-  fetchImagesByHashtags = (hashtag, page) => {
-    fetchImagesByHashtags(hashtag, page)
-      .then((data) => {
-        this.setState((prevState) => ({
-          postPreviewDtos: [...prevState.postPreviewDtos, ...data.postDtos.postPreviewDtos],
-          hasNext: data.hasNext,
-          loading: false,
-          isFetching: false,
-          error: null,
-          page: page,
-        }));
-      })
-      .catch((error) => {
-        this.setState({
-          loading: false,
-          isFetching: false,
-          error: error.message,
-        });
-      });
-  };
   
 
   // 이미지 클릭 시 상세 페이지로 이동하는 함수
@@ -193,4 +171,4 @@ class ListPage extends Component {
   }
 }
 
-export default ListPage;
+export default ListHomePage;

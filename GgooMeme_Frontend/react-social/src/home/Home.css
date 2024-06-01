@@ -102,6 +102,10 @@
     font-size:12px;
   }
 
+  .tag-box:hover {
+    transform: scale(1.05);
+  }
+
   .tag-name{
     color: black;
   }
