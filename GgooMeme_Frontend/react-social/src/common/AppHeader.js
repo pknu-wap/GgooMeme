@@ -8,19 +8,17 @@ class AppHeader extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchTerm: "", // 입력값 상태 추가
+      searchTerm: "",
       page: 0,
       currentUser: null,
     };
   }
 
   componentDidMount() {
-    // 컴포넌트가 mount될 때 현재 경로에 따라 이전 검색어를 가져옴
     this.updateSearchTerm();
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // 이전 경로와 현재 경로가 다르고, 현재 경로가 "/list/"를 포함할 때만 검색어 업데이트
     if (
       prevProps.location.pathname !== this.props.location.pathname &&
       this.props.location.pathname.includes("/list/")
@@ -29,8 +27,6 @@ class AppHeader extends Component {
     }
   }
 
-
-  // 현재 경로에 따라 검색어 업데이트
   updateSearchTerm() {
     const currentPath = this.props.location.pathname;
     if (currentPath.includes("/list/")) {
@@ -43,36 +39,21 @@ class AppHeader extends Component {
       this.setState({ searchTerm: "", page: 0 });
     }
   }
-  
 
-  // 입력값 변경 핸들러
   handleInputChange = (event) => {
     const { value } = event.target;
-    this.setState({ searchTerm: value, page: 0 }, () => {
-      // 검색어가 변경될 때마다 페이지를 0으로 초기화하고 새로운 API 요청을 보냄
-      if (value.trim() !== "") {
-        fetchImagesByHashtags(value, 0);
-      } else {
-        // 빈 문자열일 경우 다른 처리를 수행하거나 요청을 보내지 않음
-        this.setState({ postPreviewDtos: [], hasNext: false });
-      }
-    });
+    this.setState({ searchTerm: value, page: 0 });
   };
 
-  // Enter 키 입력 처리
   handleKeyPress = (event) => {
     if (event.key === "Enter") {
-      const { searchTerm, page } = this.state;
-      // 현재 경로에서 /를 제외한 부분에 따라서 이동
-      this.props.history.push(`/list/${searchTerm}/${page}`);
-      //window.location.reload();
-      //this.props.onSearch(searchTerm, page);
+      const { searchTerm } = this.state;
+      this.props.history.push(`/list/${searchTerm}/0`);
     }
   };
 
   render() {
     const { authenticated } = this.props;
-    //const { currentUser } = this.state;
     const currentPath = window.location.pathname;
 
     return (
@@ -91,9 +72,9 @@ class AppHeader extends Component {
                     className="searching-topbar"
                     type="text"
                     placeholder="search"
-                    value={this.state.searchTerm} // 입력값 상태 반영
-                    onChange={this.handleInputChange} // 입력값 변경 이벤트 핸들러
-                    onKeyDown={this.handleKeyPress} // Enter 키 입력 이벤트 핸들러
+                    value={this.state.searchTerm}
+                    onChange={this.handleInputChange}
+                    onKeyDown={this.handleKeyPress}
                   />
                 )}
                 <ul>

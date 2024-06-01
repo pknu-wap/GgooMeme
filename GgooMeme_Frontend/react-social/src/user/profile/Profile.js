@@ -105,7 +105,7 @@ class Profile extends Component {
           </div>
         </div>
         <div className="bookmarked-images">
-          <h3>북마크 디자인</h3>
+          <h3>나의 북마크 디자인</h3>
           {bookmarkedImages.length === 0 ? (
             <div className="no-bookmarks">북마크한 디자인이 없습니다. 내 취향의 디자인을 찾아보세요.</div>
           ) : (
