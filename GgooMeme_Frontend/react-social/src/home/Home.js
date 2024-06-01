@@ -20,7 +20,7 @@ class Home extends Component {
       columns: 5, // 기본 열의 수
       selectedOption: "랜덤순", // 드롭다운에서 선택된 옵션
       isExpanded: false, // 드롭다운이 열려있는지 여부
-      order: "랜덤순", // 정렬 순서
+      order: "random", // 정렬 순서
     };
     this._isMounted = false;
   }
@@ -33,7 +33,7 @@ class Home extends Component {
     const urlParams = new URLSearchParams(window.location.search);
     const page = parseInt(urlParams.get("page")) || 1;
     const hashtag = urlParams.get("hashtag") || "";
-    const order = urlParams.get("order") || "랜덤순";
+    const order = urlParams.get("order") || "random";
     // const {page, order} = this.state;
 
     this.setState({ page, hashtag, order }, () => {
@@ -168,22 +168,24 @@ class Home extends Component {
   };
 
   // 드롭다운 메뉴
-  handleItemClick = (label) => {
-    const randomPage = label === "랜덤순" ? Math.floor(Math.random() * 100) + 1 : 1;
+  handleItemClick = (order) => {
+    const labelMap = {
+      random: "랜덤순",
+      bookmark: "인기순",
+      reply: "리뷰순"
+    };
+
     this.setState(
       {
-        selectedOption: label,
+        selectedOption: labelMap[order],
         isExpanded: false,
-        order: label, // 선택된 옵션을 order로 설정
-        page: randomPage
+        order: order
       },
       () => {
-        // 선택된 옵션에 따라 데이터를 다시 불러옴
-        const { page, hashtag } = this.state;
-        console.log("Selected order:", label);
-        console.log("Page number:", randomPage);
-        this.fetchPostData(randomPage, label);
-        //this.pushHistory(page, hashtag, label); // 히스토리 업데이트
+        const { page,order } = this.state;
+        console.log("Selected order:", order);
+        console.log("Page number:", page);
+        this.fetchPostData(page, order);
       }
     );
   };
@@ -355,19 +357,19 @@ class Home extends Component {
                   <div className="dropdown-detail-menu">
                     <div
                       className="dropdown-detail-item"
-                      onClick={() => this.handleItemClick("랜덤순")}
+                      onClick={() => this.handleItemClick("random")}
                     >
                       <label>랜덤순</label>
                     </div>
                     <div
                       className="dropdown-detail-item"
-                      onClick={() => this.handleItemClick("인기순")}
+                      onClick={() => this.handleItemClick("bookmark")}
                     >
                       <label>인기순</label>
                     </div>
                     <div
                       className="dropdown-detail-item"
-                      onClick={() => this.handleItemClick("리뷰순")}
+                      onClick={() => this.handleItemClick("reply")}
                     >
                       <label>리뷰순</label>
                     </div>

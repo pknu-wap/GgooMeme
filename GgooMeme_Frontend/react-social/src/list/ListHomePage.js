@@ -17,7 +17,7 @@ class ListHomePage extends Component {
   };
 
   componentDidMount() {
-    this.fetchPostData(1, "랜덤순");
+    this.fetchPostData(1, "random");
     window.addEventListener("resize", this.handleResize);
     window.addEventListener("scroll", this.handleScroll);
   }
