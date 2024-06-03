@@ -56,8 +56,8 @@
   .slider-container {
     display: flex;
     align-items: center;
-    /* width: 100%;
-    overflow: hidden; */
+    width: 100%;
+    /*overflow: hidden; */
     position: relative; /* 버튼의 위치를 조정하기 위해 relative로 설정 */
     padding-top: 15px;
   }
@@ -65,17 +65,19 @@
   .related-images-wrapper {
     overflow: hidden;
     width: 100%;
-    margin: 0 50px; /* 버튼과의 공간을 위해 양쪽에 마진 추가 */
+    margin: 0 70px; /* 버튼과의 공간을 위해 양쪽에 마진 추가 */
   }
   
   .related-images-list {
     display: flex;
+    justify-content: space-between;
     transition: transform 0.3s ease-in-out; /* 부드러운 슬라이드 효과 */
     width: calc(20% * 5); /* 한 화면에 5개의 이미지가 나오도록 수정 */
   }
   
   .related-image-item {
-    flex: 0 0 15%; /* 한 화면에 5개의 이미지를 보여주기 위해 설정 */
+    width: 100%;
+    flex: 0 0 25%; /* 한 화면에 5개의 이미지를 보여주기 위해 설정 */
     box-sizing: border-box;
     padding: 6px;
     transition: transform 0.3s ease-in-out;
@@ -84,13 +86,13 @@
   .related-image-item img {
     width: 100%;
     height: auto;
-    border-radius: 5px;
+    max-height: 350px;
+    margin: 5px;
     padding: 30px;
-    max-height: 400px;
+    border-radius: 5px;
   }
 
   .related-image-item:hover {
-    /* transform: scale(1.05); */
     transform: translateY(-5px);
   }
 
