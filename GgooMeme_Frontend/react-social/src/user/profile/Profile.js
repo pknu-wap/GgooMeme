@@ -88,26 +88,32 @@ class Profile extends Component {
                   </div>
                 )}
               </div>
-              <div className="profile-name">
+              <div className="profile-name_email">
                 <div>
-                    <h2>
+                  <p>Name</p>
+                  <h2>
                     {currentUser && currentUser.name
-                        ? currentUser.name
-                        : "avatar"}
-                    님, 안녕하세요
-                    </h2>
+                      ? currentUser.name
+                      : "avatar"}
+                    님, 안녕하세요😊
+                  </h2>
                 </div>
-                <p className="profile-email">
-                  {currentUser && currentUser.email ? currentUser.email : ""}
-                </p>
+                <div className="profile-email">
+                  <p>Email</p>
+                  <h3>
+                    {currentUser && currentUser.email ? currentUser.email : ""}
+                  </h3>
+                </div>
               </div>
             </div>
           </div>
         </div>
         <div className="bookmarked-images">
-          <h3>북마크 디자인</h3>
+          <h3>나의 북마크 디자인</h3>
           {bookmarkedImages.length === 0 ? (
-            <div className="no-bookmarks">북마크한 디자인이 없습니다. 내 취향의 디자인을 찾아보세요.</div>
+            <div className="no-bookmarks">
+              북마크한 디자인이 없습니다. 내 취향의 디자인을 찾아보세요.
+            </div>
           ) : (
             <div className="slider-container">
               <button
@@ -121,17 +127,17 @@ class Profile extends Component {
                 <div className="image-list">
                   {currentImages.map((image) => (
                     <a
-                    key={image.postId}
-                    href={`/detail/${image.postId}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <div key={image.postId} className="image-item">
-                      <img
-                        src={image.postImage}
-                        alt={`Bookmark ${image.postId}`}
-                      />
-                    </div>
+                      key={image.postId}
+                      href={`/detail/${image.postId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div key={image.postId} className="image-item">
+                        <img
+                          src={image.postImage}
+                          alt={`Bookmark ${image.postId}`}
+                        />
+                      </div>
                     </a>
                   ))}
                 </div>

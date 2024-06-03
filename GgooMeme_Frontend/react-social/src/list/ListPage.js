@@ -11,7 +11,7 @@ class ListPage extends Component {
     error: null,
     page: 0,
     columns: 6,
-    hashtag:null,
+    hashtag: null,
     hasNext: true,
     isFetching: false,
   };
@@ -36,7 +36,7 @@ class ListPage extends Component {
   updateSearchTerm() {
     const { hashtag } = this.props.match.params;
     if (hashtag && hashtag !== "null") {
-      this.setState({ hashtag }, () => {
+      this.setState({ hashtag, page: 0, postPreviewDtos: [] }, () => {
         this.fetchImagesByHashtags(hashtag, 0); // Reset to first page
       });
     } else {
@@ -49,7 +49,7 @@ class ListPage extends Component {
   handleScroll = () => {
     const { loading, hasNext, isFetching } = this.state;
     if (loading || !hasNext || isFetching) return;
-  
+
     if (
       window.innerHeight + document.documentElement.scrollTop ===
       document.documentElement.offsetHeight
@@ -57,7 +57,7 @@ class ListPage extends Component {
       this.loadMorePosts();
     }
   };
-  
+
   loadMorePosts = () => {
     const { hashtag, page } = this.state;
     this.setState({ isFetching: true });
@@ -67,9 +67,8 @@ class ListPage extends Component {
       this.fetchPostData(page + 1, "random");
     }
   };
-  
+
   handleResize = () => {
-    // 화면 너비에 따라 열의 수를 동적으로 변경
     this.setState({ columns: this.calculateColumns() });
   };
 
@@ -89,7 +88,7 @@ class ListPage extends Component {
         return 2;
       }
     } else {
-      return 6; //초기 렌더링 값
+      return 6; // 초기 렌더링 값
     }
   };
 
@@ -117,12 +116,13 @@ class ListPage extends Component {
         });
       });
   }
-  
+
   fetchImagesByHashtags = (hashtag, page) => {
+    this.setState({ isFetching: true });
     fetchImagesByHashtags(hashtag, page)
       .then((data) => {
         this.setState((prevState) => ({
-          postPreviewDtos: [...prevState.postPreviewDtos, ...data.postDtos.postPreviewDtos],
+          postPreviewDtos: page === 0 ? data.postDtos.postPreviewDtos : [...prevState.postPreviewDtos, ...data.postDtos.postPreviewDtos],
           hasNext: data.hasNext,
           loading: false,
           isFetching: false,
@@ -138,13 +138,9 @@ class ListPage extends Component {
         });
       });
   };
-  
 
-  // 이미지 클릭 시 상세 페이지로 이동하는 함수
   handleImageClick = (postId) => {
-    // postId를 사용하여 상세 페이지 URL을 생성
     const detailPageURL = `/detail/${postId}`;
-    // 상세 페이지 URL로 이동
     this.props.history.push(detailPageURL);
   };
 
@@ -176,19 +172,18 @@ class ListPage extends Component {
 
     return (
       <div>
-      {/* 이미지 갤러리 */}
-      <div className="img-gallery">
-        {columnElements.map((column, index) => (
-          <div key={index} className="gallery-column">
-            {column}
-          </div>
-        ))}
+        <div className="img-gallery">
+          {columnElements.map((column, index) => (
+            <div key={index} className="gallery-column">
+              {column}
+            </div>
+          ))}
+        </div>
+        {isFetching && <div>Loading more...</div>}
+        {!isFetching && hasNext && (
+          <button className="load-more" onClick={this.loadMorePosts}>더보기</button>
+        )}
       </div>
-      {isFetching && <div>Loading more...</div>}
-      {!isFetching && hasNext && (
-        <button className="load-more"onClick={this.loadMorePosts}>더보기</button>
-      )}
-    </div>
     );
   }
 }

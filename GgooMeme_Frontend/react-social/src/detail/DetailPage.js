@@ -102,25 +102,6 @@ class DetailPage extends Component {
     this.setState({ replyContent: event.target.value });
   };
 
-  deleteReply = (replyId) => {
-    const { postId } = this.state;
-    request({
-      url: `${API_BASE_URL}/reply/delete`,
-      method: "POST",
-      body: JSON.stringify({ postId, replyId }),
-    })
-      .then(() => {
-        this.setState((prevState) => ({
-          replies: prevState.replies.filter((reply) => reply.id !== replyId),
-        }));
-      })
-      .catch((error) => {
-        this.setState({
-          error: error.message,
-        });
-      });
-  };
-
   fetchPostInfo = () => {
     const { postId } = this.state;
     request({
@@ -131,7 +112,7 @@ class DetailPage extends Component {
         console.log("Received post info:", data);
         this.setState({
           postInfo: data,
-          likes: data.likes,
+          likes: data.bookmarkedCount,
           isBookmarked: data.bookmarked, // 서버에서 받아온 북마크 상태로 초기화
           loading: false,
           error: null,
@@ -172,7 +153,7 @@ class DetailPage extends Component {
 
   handleNextClick = () => {
     const { relatedImages, currentPage } = this.state;
-    const totalPages = Math.ceil(relatedImages.length / 5);
+    const totalPages = Math.ceil(relatedImages.length / 4);
     this.setState((prevState) => ({
       currentPage: Math.min(prevState.currentPage + 1, totalPages - 1),
     }));
@@ -226,47 +207,6 @@ class DetailPage extends Component {
     }
   };
 
-  // toggleBookmark = async () => {
-  //   const { postId, isBookmarked, likes } = this.state;
-  //   const newBookmarkState = !isBookmarked;
-  //   const newLikes = newBookmarkState ? likes + 1 : likes - 1;
-
-  //   try {
-  //     // 북마크 상태 업데이트
-  //     const bookmarkResponse = await request({
-  //       url: `${API_BASE_URL}/post/bookmark/${postId}`,
-  //       method: "PUT",
-  //       body: JSON.stringify({ bookmarked: newBookmarkState })
-  //     });
-
-  //     let bookmarkResponseData;
-  //     try {
-  //       bookmarkResponseData = JSON.parse(bookmarkResponse);
-  //     } catch (error) {
-  //       bookmarkResponseData = bookmarkResponse;
-  //     }
-
-  //     if (bookmarkResponse.ok || bookmarkResponseData === "add bookmark" || bookmarkResponseData === "remove bookmark") {
-  //       // likes 상태 업데이트
-  //       const likesResponse = await request({
-  //         url: `${API_BASE_URL}/post/likes/${postId}`,
-  //         method: "PUT",
-  //         body: JSON.stringify({ likes: newLikes })
-  //       });
-
-  //       if (likesResponse.ok) {
-  //         this.setState({ isBookmarked: newBookmarkState, likes: newLikes });
-  //       } else {
-  //         console.error(`Error updating likes state: ${likesResponse.status}`);
-  //       }
-  //     } else {
-  //       console.error(`Error updating bookmark state: ${bookmarkResponse.status} ${bookmarkResponseData}`);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error updating bookmark/likes state:", error);
-  //   }
-  // };
-
   render() {
     const {
       postInfo,
@@ -280,6 +220,7 @@ class DetailPage extends Component {
       replyLoading,
       hasMoreReplies,
       replyPage,
+      likes,
     } = this.state;
 
     if (loading) {
@@ -294,8 +235,8 @@ class DetailPage extends Component {
       return <div>No post information available.</div>;
     }
 
-    const startIndex = currentPage * 5;
-    const endIndex = startIndex + 5;
+    const startIndex = currentPage * 4;
+    const endIndex = startIndex + 4;
     const currentImages = relatedImages.slice(startIndex, endIndex);
 
     return (
@@ -306,13 +247,13 @@ class DetailPage extends Component {
           </div>
           <div className="post-info">
             <div className="likes-bookmarked">
-              <p>Likes: {this.state.likes}</p>
-              {/* <p>Likes: {postInfo.likes}</p> */}
               <div className="bookmark-icon" onClick={this.toggleBookmark}>
                 <BookmarkIcon filled={isBookmarked} />
               </div>
               <p>북마크</p>
+              <p>북마크 수: {likes}</p>
             </div>
+            <hr className="division"></hr>
             <div className="reply-container">
               <h3>댓글</h3>
               <div className="replies-list">
@@ -320,24 +261,23 @@ class DetailPage extends Component {
                   replies.map((reply, index) => (
                     <div key={index} className="reply-item">
                       <p>{reply}</p>
-                      {/* <button onClick={() => this.deleteReply(index)}>
-                        삭제
-                      </button> */}
                     </div>
                   ))
                 ) : (
                   <p>댓글이 없습니다.</p>
                 )}
               </div>
-              {hasMoreReplies && (
-                <button
-                  className="prev-reply-loading"
-                  onClick={() => this.fetchReplies(replyPage + 1)}
-                  disabled={replyLoading}
-                >
-                  {replyLoading ? "불러오는 중..." : "이전 리뷰보기"}
-                </button>
-              )}
+              <div>
+                {hasMoreReplies && (
+                  <button
+                    className="prev-reply-loading"
+                    onClick={() => this.fetchReplies(replyPage + 1)}
+                    disabled={replyLoading}
+                  >
+                    {replyLoading ? "불러오는 중..." : "이전 리뷰보기"}
+                  </button>
+                )}
+              </div>
               <div className="reply-input">
                 <textarea
                   className="reply-box"
@@ -393,7 +333,7 @@ class DetailPage extends Component {
             <button
               className="next-button"
               onClick={this.handleNextClick}
-              disabled={currentPage === Math.ceil(relatedImages.length / 5) - 1}
+              disabled={currentPage === Math.ceil(relatedImages.length / 4) - 1}
             >
               &gt;
             </button>
