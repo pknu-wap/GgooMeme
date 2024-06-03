@@ -1,53 +1,71 @@
 .profile-container {
     display: flex;
-    align-items: center;
-    justify-content: center; /* 중앙 정렬 추가 */
+    align-items:center;
     height: 450px;
     padding-top: 120px;
-    padding-bottom: 60px;
-    background-color: rgb(180, 211, 240);
+    padding-bottom: 70px;
+    background-color: rgb(180,211,240);
 }
 
 .profile-info {
-    display: flex;
+    display:flex;
     align-items: center;
-    justify-content: center;
-    flex-direction: column; /* 수직 정렬 */
-    background: white; /* 배경색 추가 */
-    padding: 20px; /* 여백 추가 */
-    border-radius: 10px; /* 둥근 모서리 추가 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
-    text-align: center; /* 텍스트 중앙 정렬 */
+    margin-left: 10px;
+}
+
+.profile-name {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: 500;
+    font-size: 14px;
+    margin-left: 40px;
+    padding-bottom: 35px;
+}
+
+.profile-name_email {
+    margin-left: 50px;
+}
+
+.profile-name_email h2 {
+    margin: 10px 0 20px 0; /* 위아래 여백 추가 */
+    font-size: 1.3em; 
+}
+
+.profile-name_email .profile-email h3 {
+    margin: 10px 0; 
+    font-size: 1em; 
 }
 
 .profile-avatar img {
     border-radius: 50%;
-    width: 160px; /* 크기 고정 */
-    height: 160px; /* 크기 고정 */
+    width: 240px;
+    width: 240px;
+    margin-left: 25px;
     border: 2px solid #71b6d6;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .text-avatar {
-    width: 150px;
-    height: 150px;
+    width: 200px;
+    height: 200px;
     margin: 0 auto;
     vertical-align: middle;
     text-align: center;
     border-radius: 50%;
     background: #46b5e5;
-    background: linear-gradient(45deg, #46b5e5 1%, #1e88e5 64%, #40baf5 97%);
-    background-image: -ms-linear-gradient(45deg, #46b5e5 1%, #1e88e5 64%, #40baf5 97%);
-    background-image: -moz-linear-gradient(45deg, #46b5e5 1%, #1e88e5 64%, #40baf5 97%);
-    background-image: -o-linear-gradient(45deg, #46b5e5 1%, #1e88e5 64%, #40baf5 97%);
-    background-image: -webkit-linear-gradient(45deg, #46b5e5 1%, #1e88e5 64%, #40baf5 97%);
-    background-image: linear-gradient(45deg, #46b5e5 1%, #1e88e5 64%, #40baf5 97%);
+    background: linear-gradient(45deg,#46b5e5 1%,#1e88e5 64%,#40baf5 97%);
+    background-image: -ms-linear-gradient(45deg,#46b5e5 1%,#1e88e5 64%,#40baf5 97%);
+    background-image: -moz-linear-gradient(45deg,#46b5e5 1%,#1e88e5 64%,#40baf5 97%);
+    background-image: -o-linear-gradient(45deg,#46b5e5 1%,#1e88e5 64%,#40baf5 97%);
+    background-image: -webkit-linear-gradient(45deg,#46b5e5 1%,#1e88e5 64%,#40baf5 97%);
+    background-image: linear-gradient(45deg,#46b5e5 1%,#1e88e5 64%,#40baf5 97%);
 }
 
 .text-avatar span {
-    line-height: 150px; /* 크기에 맞게 조정 */
+    line-height: 200px;
     color: #fff;
-    font-size: 2em; /* 크기에 맞게 조정 */
+    font-size: 3em;
 }
 
 .profile-name {

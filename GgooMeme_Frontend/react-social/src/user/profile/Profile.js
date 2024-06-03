@@ -88,7 +88,7 @@ class Profile extends Component {
                   </div>
                 )}
               </div>
-              <div className="profile-name">
+              <div className="profile-name_email">
                 <div>
                   <p>Name</p>
                   <h2>
