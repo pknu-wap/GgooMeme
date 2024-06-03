@@ -86,7 +86,7 @@
     height: auto;
     border-radius: 5px;
     padding: 30px;
-    max-height: 500px;
+    max-height: 400px;
   }
 
   .related-image-item:hover {
@@ -185,7 +185,7 @@
     margin-top:40px;
     padding: 4px;
     border: 1px solid;
-    border-radius: 5px;
+    border-radius: 5px; 
     background-color: aliceblue;
     cursor:pointer;
   }
@@ -201,14 +201,31 @@
   }
 
   .reply-submit:hover, .prev-reply-loading:hover{
-    background-color: rgb(132, 196, 226);
+    /* background-color: rgb(132, 196, 226); */
+    border-color: #40a9ff;
+    outline:0;
+    border-right-width: 1px!important;
   }
 
   .reply-input {
     display: flex;
+    float:right;
+    padding-bottom: 5px;
   }
   .reply-input textarea {
-    height: 50px;
+    height: auto;
+    width:auto;
+    min-width: 100px;
+  }
+
+  .reply-input textarea:hover,.reply-input textarea:focus {
+    border-color: #40a9ff;
+    outline:0;
+    border-right-width: 1px!important;
+  }
+
+  .reply-input button {
+    width: 70px;
   }
 
   /* 댓글 스크롤 */

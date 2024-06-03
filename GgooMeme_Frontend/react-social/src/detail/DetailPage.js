@@ -207,7 +207,6 @@ class DetailPage extends Component {
     }
   };
 
-
   render() {
     const {
       postInfo,
@@ -248,7 +247,6 @@ class DetailPage extends Component {
           </div>
           <div className="post-info">
             <div className="likes-bookmarked">
-              
               <div className="bookmark-icon" onClick={this.toggleBookmark}>
                 <BookmarkIcon filled={isBookmarked} />
               </div>
@@ -269,15 +267,17 @@ class DetailPage extends Component {
                   <p>댓글이 없습니다.</p>
                 )}
               </div>
-              {hasMoreReplies && (
-                <button
-                  className="prev-reply-loading"
-                  onClick={() => this.fetchReplies(replyPage + 1)}
-                  disabled={replyLoading}
-                >
-                  {replyLoading ? "불러오는 중..." : "이전 리뷰보기"}
-                </button>
-              )}
+              <div>
+                {hasMoreReplies && (
+                  <button
+                    className="prev-reply-loading"
+                    onClick={() => this.fetchReplies(replyPage + 1)}
+                    disabled={replyLoading}
+                  >
+                    {replyLoading ? "불러오는 중..." : "이전 리뷰보기"}
+                  </button>
+                )}
+              </div>
               <div className="reply-input">
                 <textarea
                   className="reply-box"
