@@ -55,7 +55,7 @@ class Home extends Component {
     const urlParams = new URLSearchParams(window.location.search);
     const page = parseInt(urlParams.get("page")) || 1; // URL에서 페이지 번호 가져오기
     const hashtag = urlParams.get("hashtag") || ""; // URL에서 해시태그 가져오기
-    const order = urlParams.get("order") || "랜덤순"; // URL에서 정렬 순서 가져오기
+    const order = urlParams.get("order") || "random"; // URL에서 정렬 순서 가져오기
     
     this.setState({ page, hashtag, order }, () => {
       if (hashtag) {
@@ -70,20 +70,11 @@ class Home extends Component {
   // 히스토리에 새로운 항목 추가
   pushHistory = (page, hashtag, order) => {
     const url = hashtag
-      ? `/search/${hashtag}/${page+1}/${order}`
+      ? `/search/${hashtag}/${page}/${order}`
       : `/post/main/${page}/${order}`;
     window.history.pushState({page, hashtag,order}, "", url);
   };
-
-  // 페이지 이동 시 호출되는 메서드
-  handlePageChange = (pageNumber) => {
-    const { hashtag, order } = this.state;
-    this.setState({ page: pageNumber }, () => {
-      this.fetchPostData(pageNumber, order);
-      this.fetchImagesByHashtags(hashtag, pageNumber);
-      //this.pushHistory(pageNumber, hashtag, order); // 히스토리에 추가
-    });
-  };
+  
 
   handleResize = () => {
     // 화면 너비에 따라 열의 수를 동적으로 변경
@@ -210,9 +201,9 @@ class Home extends Component {
   };
 
   handleTagClick = (tag) => {
-    this.setState({ hashtag: tag, page: 0 }, () => {
-      this.fetchImagesByHashtags(tag, 0);
-      this.pushHistory(0, tag, this.state.order);
+    this.setState({ hashtag: tag, page: 1 }, () => {
+      this.fetchImagesByHashtags(tag, 1);
+      this.pushHistory(1, tag, this.state.order);
     });
   };
   
@@ -229,7 +220,7 @@ class Home extends Component {
     const { hashtag, page, order } = this.state;
     if (hashtag) {
       this.fetchImagesByHashtags(hashtag, page);
-      this.props.history.push(`/list/${hashtag}/${page+1}`);
+      this.props.history.push(`/list/${hashtag}/${page}`);
     } else {
       this.fetchPostData(page, order);
       this.props.history.push(`/list/home/${page}`);

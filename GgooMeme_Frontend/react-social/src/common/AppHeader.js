@@ -36,19 +36,19 @@ class AppHeader extends Component {
         page: parts[3],
       });
     } else if (currentPath === "/home") {
-      this.setState({ searchTerm: "", page: 0 });
+      this.setState({ searchTerm: "", page: 1 });
     }
   }
 
   handleInputChange = (event) => {
     const { value } = event.target;
-    this.setState({ searchTerm: value, page: 0 });
+    this.setState({ searchTerm: value, page: 1 });
   };
 
   handleKeyPress = (event) => {
     if (event.key === "Enter") {
       const { searchTerm } = this.state;
-      this.props.history.push(`/list/${searchTerm}/0`);
+      this.props.history.push(`/list/${searchTerm}/1`);
     }
   };
 
