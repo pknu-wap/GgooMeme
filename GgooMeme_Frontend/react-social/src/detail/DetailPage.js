@@ -153,7 +153,7 @@ class DetailPage extends Component {
 
   handleNextClick = () => {
     const { relatedImages, currentPage } = this.state;
-    const totalPages = Math.ceil(relatedImages.length / 5);
+    const totalPages = Math.ceil(relatedImages.length / 4);
     this.setState((prevState) => ({
       currentPage: Math.min(prevState.currentPage + 1, totalPages - 1),
     }));
@@ -236,8 +236,8 @@ class DetailPage extends Component {
       return <div>No post information available.</div>;
     }
 
-    const startIndex = currentPage * 5;
-    const endIndex = startIndex + 5;
+    const startIndex = currentPage * 4;
+    const endIndex = startIndex + 4;
     const currentImages = relatedImages.slice(startIndex, endIndex);
 
     return (
@@ -248,12 +248,14 @@ class DetailPage extends Component {
           </div>
           <div className="post-info">
             <div className="likes-bookmarked">
-              <p>Likes: {likes}</p>
+              
               <div className="bookmark-icon" onClick={this.toggleBookmark}>
                 <BookmarkIcon filled={isBookmarked} />
               </div>
               <p>북마크</p>
+              <p>북마크 수: {likes}</p>
             </div>
+            <hr className="division"></hr>
             <div className="reply-container">
               <h3>댓글</h3>
               <div className="replies-list">
@@ -331,7 +333,7 @@ class DetailPage extends Component {
             <button
               className="next-button"
               onClick={this.handleNextClick}
-              disabled={currentPage === Math.ceil(relatedImages.length / 5) - 1}
+              disabled={currentPage === Math.ceil(relatedImages.length / 4) - 1}
             >
               &gt;
             </button>

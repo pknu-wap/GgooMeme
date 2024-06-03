@@ -22,15 +22,16 @@
   .post-image img {
     max-width: 100%; 
     height: auto;
+    padding: 20px;
     /* max-width: 300px;
     max-height: 300px; */
   }
 
   .likes-bookmarked {
     display:flex;
-    margin-left: 20px; /* 이미지와 정보 사이의 간격 조정 */
     align-items:center;
-    justify-content: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
   }
   
   .post-info {
@@ -64,7 +65,7 @@
   .related-images-wrapper {
     overflow: hidden;
     width: 100%;
-    margin: 0 40px; /* 버튼과의 공간을 위해 양쪽에 마진 추가 */
+    margin: 0 50px; /* 버튼과의 공간을 위해 양쪽에 마진 추가 */
   }
   
   .related-images-list {
@@ -84,7 +85,8 @@
     width: 100%;
     height: auto;
     border-radius: 5px;
-    padding: 20px;
+    padding: 30px;
+    max-height: 500px;
   }
 
   .related-image-item:hover {
@@ -215,3 +217,7 @@
     overflow-y: auto;
   }
   
+  .division {
+    border: 1px solid rgb(139, 184, 223);
+    width:100%;
+  }

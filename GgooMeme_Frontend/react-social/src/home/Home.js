@@ -285,10 +285,10 @@ class Home extends Component {
               <div className="tag-container">
                 <div
                   className="tag-box"
-                  onClick={() => this.handleTagClick("캐릭터")}
+                  onClick={() => this.handleTagClick("ppt")}
                 >
                   <a className="tag-name">
-                    <span>캐릭터</span>
+                    <span>ppt</span>
                   </a>
                 </div>
                 <div
@@ -301,10 +301,10 @@ class Home extends Component {
                 </div>
                 <div
                   className="tag-box"
-                  onClick={() => this.handleTagClick("꽃")}
+                  onClick={() => this.handleTagClick("음식")}
                 >
                   <a className="tag-name">
-                    <span>꽃</span>
+                    <span>음식</span>
                   </a>
                 </div>
                 <div
