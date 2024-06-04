@@ -8,6 +8,7 @@ class GgoememeBackendApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }
