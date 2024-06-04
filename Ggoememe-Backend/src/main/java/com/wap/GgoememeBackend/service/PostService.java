@@ -1,5 +1,6 @@
 package com.wap.GgoememeBackend.service;
 
+import com.wap.GgoememeBackend.domain.CachedPost;
 import com.wap.GgoememeBackend.domain.Post;
 import com.wap.GgoememeBackend.domain.PostBookmarkedUser;
 import com.wap.GgoememeBackend.domain.User;
@@ -12,6 +13,7 @@ import com.wap.GgoememeBackend.repository.mongo.PostRepository;
 import com.wap.GgoememeBackend.repository.mysql.PostBookmarkedUserRepository;
 import com.wap.GgoememeBackend.repository.mysql.UserRepository;
 import com.wap.GgoememeBackend.security.UserPrincipal;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -44,17 +46,20 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NoSuchElementException("no post"));
 
-        User user = userRepository.findById(userPrincipal.getId())
-                .orElseThrow(() -> new NoSuchElementException("no user"));
+        boolean isBookmarked = false;
+        if(userPrincipal!=null){
+            User user = userRepository.findById(userPrincipal.getId())
+                    .orElseThrow(() -> new NoSuchElementException("no user"));
+            Optional<PostBookmarkedUser> postBookmarkedUser = postBookmarkedUserRepository.findByPostIdAndUser(postId, user);
+            if(postBookmarkedUser.isPresent()){
+                isBookmarked=true;
+            }
+        }
+        List<PostBookmarkedUser> list = postBookmarkedUserRepository.findPostBookmarkedUsersByPostId(postId);
 
         PostDto postDto = PostDto.of(post);
-
-        //post의 유저중에 user의 id와 일치하는 user가 있는지 확인
-
-        Optional<PostBookmarkedUser> postBookmarkedUser = postBookmarkedUserRepository.findByPostIdAndUser(postId, user);
-        if(postBookmarkedUser.isPresent()){
-            postDto.setBookmarked(true);
-        }
+        postDto.setBookmarkedCount(list.size());
+        postDto.setBookmarked(isBookmarked);
         return postDto;
     }
 
@@ -76,6 +81,8 @@ public class PostService {
         }
     }
 
+
+    @Cacheable(cacheNames = "getRelatedPosts", key = "#root.target + #root.methodName+ #postId +#page", sync = true, cacheManager = "rcm")
     public RelatedPostResponse getRelatedPosts(String postId, int page) throws RuntimeException {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NoSuchElementException("no post"));
@@ -86,6 +93,7 @@ public class PostService {
 
 
 
+    @Cacheable(cacheNames = "searchPosts", key = "#root.target + #root.methodName+ #tag +#page", sync = true, cacheManager = "rcm")
     public SearchPostResponse searchPosts(String tag, int page){
         PageRequest pageRequest = PageRequest.of(page - 1, 20, Sort.by("id").descending());
         Page<Post> pageOfPosts = postRepository.findByTags(tag, pageRequest);
@@ -113,7 +121,7 @@ public class PostService {
 
         return new MainPostResponse(hasNext, postPreviewDtos);
     }
-
+    @Cacheable(cacheNames = "replyMainPosts", key = "#root.target + #root.methodName + #page", sync = true, cacheManager = "rcm")
     public MainPostResponse replyMainPosts(int page) {
         int pageSize = 20;
         PageRequest pageRequest = PageRequest.of(page - 1, pageSize, Sort.by("replies.size").descending());
@@ -127,12 +135,12 @@ public class PostService {
         return new MainPostResponse(hasNext, postPreviewDtos);
     }
 
+    @Cacheable(cacheNames = "bookmarkMainPosts", key = "#root.target + #root.methodName + #page", sync = true, cacheManager = "rcm")
     public MainPostResponse bookmarkMainPosts(int page) {
         int pageSize = 20;
         PageRequest pageRequest = PageRequest.of(page - 1, pageSize, Sort.by("bookmarkedUsers.size()").descending());
         Page<Post> pageOfPosts = postRepository.findAll(pageRequest);
 
         return new MainPostResponse(pageOfPosts.hasNext(), PostPreviewDtos.of(pageOfPosts.getContent()));
-
     }
 }

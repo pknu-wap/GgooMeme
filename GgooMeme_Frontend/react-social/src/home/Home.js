@@ -1,35 +1,80 @@
 import React, { Component } from "react";
 import { request } from "../util/APIUtils";
+import { withRouter } from 'react-router-dom';
 import { API_BASE_URL, ACCESS_TOKEN } from "../constants";
-import "./Home.css"
+import "./Home.css";
 import pencilLogo from "../../src/img/pencil.png";
+import { Link } from "react-router-dom";
+import { fetchImagesByHashtags } from "../util/APIUtils";
 
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      hashtags: "",
+      hashtag: "",
       postPreviewDtos: [],
       hasNext: false,
       loading: true,
       error: null,
-      page: 0,
+      page: 1,
       columns: 5, // 기본 열의 수
       selectedOption: "랜덤순", // 드롭다운에서 선택된 옵션
       isExpanded: false, // 드롭다운이 열려있는지 여부
+      order: "random", // 정렬 순서
     };
+    this._isMounted = false;
   }
 
   componentDidMount() {
-    const { page } = this.state;
-    this.fetchPostData(page);
-
+    this._isMounted = true;
     window.addEventListener("resize", this.handleResize);
+    window.addEventListener("popstate", this.handlePopState);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const page = parseInt(urlParams.get("page")) || 1;
+    const hashtag = urlParams.get("hashtag") || "";
+    const order = urlParams.get("order") || "random";
+    // const {page, order} = this.state;
+
+    this.setState({ page, hashtag, order }, () => {
+      if (hashtag) {
+        this.fetchImagesByHashtags(hashtag, page);
+      } else {
+        this.fetchPostData(page, order);
+      }
+    });
   }
 
   componentWillUnmount() {
+    this._isMounted = false;
     window.removeEventListener("resize", this.handleResize);
+    window.removeEventListener("popstate", this.handlePopState);
   }
+
+  handlePopState = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const page = parseInt(urlParams.get("page")) || 1; // URL에서 페이지 번호 가져오기
+    const hashtag = urlParams.get("hashtag") || ""; // URL에서 해시태그 가져오기
+    const order = urlParams.get("order") || "random"; // URL에서 정렬 순서 가져오기
+    
+    this.setState({ page, hashtag, order }, () => {
+      if (hashtag) {
+        this.fetchImagesByHashtags(hashtag, page);
+      } else {
+        this.fetchPostData(page, order);
+      }
+    });
+  };
+
+
+  // 히스토리에 새로운 항목 추가
+  pushHistory = (page, hashtag, order) => {
+    const url = hashtag
+      ? `/search/${hashtag}/${page}/${order}`
+      : `/post/main/${page}/${order}`;
+    window.history.pushState({page, hashtag,order}, "", url);
+  };
+  
 
   handleResize = () => {
     // 화면 너비에 따라 열의 수를 동적으로 변경
@@ -52,45 +97,88 @@ class Home extends Component {
         return 1;
       }
     } else {
-      return 5; //초기 렌더링 값
+      return 5; // 초기 렌더링 값
     }
   };
 
-  fetchPostData(page) {
-    const { hashtags } = this.state;
+  // 이미지 정보 가져오기(처음 렌더링 시)
+  fetchPostData(page, order) {
+    const url = `${API_BASE_URL}/post/main/${page}/${order}`;
+    console.log("Fetching data from:", url); // 추가된 디버그 로그
     request({
-      url: API_BASE_URL + `/post/main/${page}`,
+      url: url,
       method: "GET",
     })
       .then((data) => {
-        console.log("Received data:", data);
-        this.setState({
-          postPreviewDtos: data.postDtos.postPreviewDtos,
-          hasNext: data.hasNext,
-          loading: false,
-          error: null,
-          page: page,
-        });
+        console.log("Received data:", data); // 추가된 디버그 로그
+        if (this._isMounted) {
+          this.setState({
+            postPreviewDtos: data.postDtos.postPreviewDtos,
+            hasNext: data.hasNext,
+            loading: false,
+            error: null,
+            page: page,
+            order: order,
+          });
+        }
       })
       .catch((error) => {
-        this.setState({
-          loading: false,
-          error: error.message,
-        });
+        if (this._isMounted) {
+          this.setState({
+            loading: false,
+            error: error.message,
+          });
+        }
       });
   }
+  
 
-  handleInputChange = (event) => {
-    const { value } = event.target;
-    this.setState({ hashtags: value });
+  fetchImagesByHashtags = (hashtag, page) => {
+    fetchImagesByHashtags(hashtag, page)
+      .then((data) => {
+        console.log("Received images:", data);
+        if (this._isMounted) { // 컴포넌트가 마운트된 경우에만 상태 업데이트
+          this.setState({
+            postPreviewDtos: data.postDtos.postPreviewDtos,
+            hasNext: data.hasNext,
+            loading: false,
+            error: null,
+            page: page,
+            hashtag: hashtag,
+          });
+        }
+      })
+      .catch((error) => {
+        if (this._isMounted) { // 컴포넌트가 마운트된 경우에만 상태 업데이트
+          this.setState({
+            loading: false,
+            error: error.message,
+          });
+        }
+      });
   };
 
-  handleItemClick = (label) => {
-    this.setState({
-      selectedOption: label,
-      isExpanded: false,
-      // 선택된 옵션에 따라 데이터를 다시 불러올 수 있도록 추가 작업 가능
-    });
+  // 드롭다운 메뉴
+  handleItemClick = (order) => {
+    const labelMap = {
+      random: "랜덤순",
+      bookmark: "인기순",
+      reply: "리뷰순"
+    };
+
+    this.setState(
+      {
+        selectedOption: labelMap[order],
+        isExpanded: false,
+        order: order
+      },
+      () => {
+        const { page,order } = this.state;
+        console.log("Selected order:", order);
+        console.log("Page number:", page);
+        this.fetchPostData(page, order);
+      }
+    );
   };
 
   toggleExpand = () => {
@@ -98,6 +186,47 @@ class Home extends Component {
       isExpanded: !prevState.isExpanded,
     }));
   };
+
+  // input 검색 시 (Enter 키 / onChange)
+  handleKeyPress = (event) => {
+    const { page, order } = this.state;
+    if (event.key === "Enter") {
+      const { value } = event.target;
+      if (value.trim() !== "") {
+        this.props.history.push(`/list/${value}/${page}/${order}`);
+      } else {
+        this.props.history.push(`/post/main/${page}/${order}`);
+      }
+    }
+  };
+
+  handleTagClick = (tag) => {
+    this.setState({ hashtag: tag, page: 1 }, () => {
+      this.fetchImagesByHashtags(tag, 1);
+      this.pushHistory(1, tag, this.state.order);
+    });
+  };
+  
+
+  // 이미지 클릭 시 상세 페이지로 이동하는 함수
+  handleImageClick = (postId) => {
+    // postId를 사용하여 상세 페이지 URL을 생성
+    const detailPageURL = `/detail/${postId}`;
+    // 상세 페이지 URL로 이동
+    this.props.history.push(detailPageURL);
+  };
+
+  handleMoreClick = () => {
+    const { hashtag, page, order } = this.state;
+    if (hashtag) {
+      this.fetchImagesByHashtags(hashtag, page);
+      this.props.history.push(`/list/${hashtag}/${page}`);
+    } else {
+      this.fetchPostData(page, order);
+      this.props.history.push(`/list/home/${page}`);
+    }
+    //this.props.history.push(`/list/${hashtag}/${page+1}`);
+  }
 
   render() {
     const {
@@ -109,12 +238,13 @@ class Home extends Component {
       columns,
       selectedOption,
       isExpanded,
-      hashtags,
+      hashtag,
     } = this.state;
 
     if (loading) {
-      return <div>Loading...</div>;
+      return <div className="loading">Loading...</div>;
     }
+    // 테스트를 위해 잠시 주석 표시
     if (error) {
       return <div>Error: {error}</div>;
     }
@@ -124,21 +254,15 @@ class Home extends Component {
     postPreviewDtos.forEach((post, index) => {
       const columnIndex = index % columns;
       columnElements[columnIndex].push(
-        <div key={post.postId} className="gallery-item">
+        <div
+          key={post.postId}
+          className="gallery-item"
+          onClick={() => this.handleImageClick(post.postId)}
+        >
           <img src={post.postImage} alt={`Post ${post.postId}`} />
         </div>
       );
     });
-
-    // 페이지 번호 목록 생성
-    const pageNumbers = [];
-    for (let i = 0; i <= page; i++) {
-      pageNumbers.push(
-        <button key={i} onClick={() => this.fetchPostData(i)}>
-          {i + 1}
-        </button>
-      );
-    }
 
     return (
       <div className="homei-container">
@@ -155,35 +279,48 @@ class Home extends Component {
               type="text"
               className="home-input"
               placeholder=" search"
-              onChange={this.handleInputChange}
-              value={hashtags}
+              onKeyDown={this.handleKeyPress}
             ></input>
             <div className="tag-out-container">
               <div className="tag-container">
-                {/* a를 link로 변경??? */}
-                <div className="tag-box" onClick={this.handleInputChange}>
-                  <a className="tag-name" href="">
-                    <span>html</span>
+                <div
+                  className="tag-box"
+                  onClick={() => this.handleTagClick("ppt")}
+                >
+                  <a className="tag-name">
+                    <span>ppt</span>
                   </a>
                 </div>
-                <div className="tag-box" onClick={this.handleInputChange}>
-                  <a className="tag-name" href="">
-                    <span>CSS</span>
+                <div
+                  className="tag-box"
+                  onClick={() => this.handleTagClick("사람")}
+                >
+                  <a className="tag-name">
+                    <span>사람</span>
                   </a>
                 </div>
-                <div className="tag-box">
-                  <a className="tag-name" href="">
-                    <span>일러스트</span>
+                <div
+                  className="tag-box"
+                  onClick={() => this.handleTagClick("음식")}
+                >
+                  <a className="tag-name">
+                    <span>음식</span>
                   </a>
                 </div>
-                <div className="tag-box">
-                  <a className="tag-name" href="">
-                    <span>아이콘</span>
+                <div
+                  className="tag-box"
+                  onClick={() => this.handleTagClick("식물")}
+                >
+                  <a className="tag-name">
+                    <span>식물</span>
                   </a>
                 </div>
-                <div className="tag-box">
-                  <a className="tag-name" href="">
-                    <span>캐리커쳐</span>
+                <div
+                  className="tag-box"
+                  onClick={() => this.handleTagClick("동물")}
+                >
+                  <a className="tag-name">
+                    <span>동물</span>
                   </a>
                 </div>
               </div>
@@ -211,19 +348,19 @@ class Home extends Component {
                   <div className="dropdown-detail-menu">
                     <div
                       className="dropdown-detail-item"
-                      onClick={() => this.handleItemClick("랜덤순")}
+                      onClick={() => this.handleItemClick("random")}
                     >
                       <label>랜덤순</label>
                     </div>
                     <div
                       className="dropdown-detail-item"
-                      onClick={() => this.handleItemClick("인기순")}
+                      onClick={() => this.handleItemClick("bookmark")}
                     >
                       <label>인기순</label>
                     </div>
                     <div
                       className="dropdown-detail-item"
-                      onClick={() => this.handleItemClick("리뷰순")}
+                      onClick={() => this.handleItemClick("reply")}
                     >
                       <label>리뷰순</label>
                     </div>
@@ -244,9 +381,9 @@ class Home extends Component {
 
           {/* 페이지 네이션 */}
           <div className="pagination">
-            {hasNext && (
-              <button onClick={() => this.fetchPostData(pageNumbers)}>{pageNumbers}</button>
-            )}
+            <button className="load-more" onClick={this.handleMoreClick}>
+              더보기
+            </button>
           </div>
         </div>
       </div>
@@ -254,4 +391,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default withRouter(Home);

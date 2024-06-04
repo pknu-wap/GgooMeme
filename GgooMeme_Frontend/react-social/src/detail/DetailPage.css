@@ -1,0 +1,242 @@
+* {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .detail-container {
+    display: flex;
+    flex-direction: column;
+    padding-left: 60px;
+    padding-top: 80px;
+    padding-bottom: 60px;
+    padding-right: 30px;
+  }
+
+  .detail-info {
+    display: flex;
+    align-items: center; /*세로 정렬 조정 */
+    justify-content: space-around;
+    padding: 30px;
+  }
+  
+  .post-image img {
+    max-width: 100%; 
+    height: auto;
+    padding: 20px;
+    /* max-width: 300px;
+    max-height: 300px; */
+  }
+
+  .likes-bookmarked {
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .post-info {
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .post-info p {
+    margin: 10px;
+  }
+
+  .related-images {
+    width: 100%;
+    /* max-width: 1500px; */
+    overflow: hidden;
+    position: relative;
+    margin-top: 50px;
+  }
+  
+  .slider-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    /*overflow: hidden; */
+    position: relative; /* 버튼의 위치를 조정하기 위해 relative로 설정 */
+    padding-top: 15px;
+  }
+
+  .related-images-wrapper {
+    overflow: hidden;
+    width: 100%;
+    margin: 0 70px; /* 버튼과의 공간을 위해 양쪽에 마진 추가 */
+  }
+  
+  .related-images-list {
+    display: flex;
+    justify-content: space-between;
+    transition: transform 0.3s ease-in-out; /* 부드러운 슬라이드 효과 */
+    width: calc(20% * 5); /* 한 화면에 5개의 이미지가 나오도록 수정 */
+  }
+  
+  .related-image-item {
+    width: 100%;
+    flex: 0 0 25%; /* 한 화면에 5개의 이미지를 보여주기 위해 설정 */
+    box-sizing: border-box;
+    padding: 6px;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .related-image-item img {
+    width: 100%;
+    height: auto;
+    max-height: 350px;
+    margin: 5px;
+    padding: 30px;
+    border-radius: 5px;
+  }
+
+  .related-image-item:hover {
+    transform: translateY(-5px);
+  }
+
+  .prev-button, .next-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(72, 135, 218, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 20px;
+  }
+  
+  .prev-button {
+    left: 0px;
+  }
+  
+  .next-button {
+    right: 0px;
+  }
+  .prev-button:hover, .next-button:hover{
+    background-color: rgba(17, 44, 116, 0.5);
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    z-index:1;
+  }
+
+  .image-tag {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* 태그 간 간격 추가 */
+    margin-top: 10px;
+  }
+  
+  .image-tag span {
+    background-color: rgb(237,245,254);
+    border-radius: 50%;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor:pointer;
+  }
+
+  .image-tag span:hover {
+    transform: scale(1.05)
+  }
+
+  .bookmark-icon {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    transition: fill 0.2s ease-in-out;
+  }
+
+  .post-image img{
+    margin: 20px;
+    max-width: 900px;
+  }
+
+  .post-info {
+    margin: 40px;
+    border: 1px solid;
+    border-radius: 20px;
+    padding: 15px;
+    border: 3px solid rgb(139, 184, 223);
+  }
+
+  .reply-container {
+    margin-top: 30px;
+  }
+
+  .reply-container h3 {
+    margin-bottom: 10px;
+  }
+
+  .reply-box{
+    margin: 20px 20px 0px 0px;
+    padding: 5px;
+    border-radius: 5px;
+  }
+
+  .reply-submit {
+    /* margin: 10px 10px 10px 0px; */
+    margin-top:40px;
+    padding: 4px;
+    border: 1px solid;
+    border-radius: 5px; 
+    background-color: aliceblue;
+    cursor:pointer;
+  }
+
+  .prev-reply-loading {
+    background-color: aliceblue;
+    margin-top: 20px;
+    padding:4px;
+    border: 1px solid;
+    border-radius: 4px;
+    font-size: 11px;
+    cursor:pointer;
+  }
+
+  .reply-submit:hover, .prev-reply-loading:hover{
+    /* background-color: rgb(132, 196, 226); */
+    border-color: #40a9ff;
+    outline:0;
+    border-right-width: 1px!important;
+  }
+
+  .reply-input {
+    display: flex;
+    float:right;
+    padding-bottom: 5px;
+  }
+  .reply-input textarea {
+    height: auto;
+    width:auto;
+    min-width: 100px;
+  }
+
+  .reply-input textarea:hover,.reply-input textarea:focus {
+    border-color: #40a9ff;
+    outline:0;
+    border-right-width: 1px!important;
+  }
+
+  .reply-input button {
+    width: 70px;
+  }
+
+  /* 댓글 스크롤 */
+  .replies-list {
+    max-height: 150px; /* 댓글 3개 높이에 맞게 설정 */
+    overflow-y: auto;
+  }
+  
+  .division {
+    border: 1px solid rgb(139, 184, 223);
+    width:100%;
+  }

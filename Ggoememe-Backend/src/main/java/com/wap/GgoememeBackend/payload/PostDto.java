@@ -15,6 +15,7 @@ public class PostDto {
     private String postId;
     private String image;
     private List<String> tags;
+    private int bookmarkedCount;
     private boolean isBookmarked;
 
     public static PostDto of(Post post){
@@ -22,6 +23,7 @@ public class PostDto {
         return new PostDto(post.getId(),
                 post.getSrc(),
                 post.getTags(),
+                0,
                 false);
     }
 }

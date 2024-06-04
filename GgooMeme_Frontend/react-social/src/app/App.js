@@ -1,7 +1,11 @@
 import React, { Component } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, withRouter } from "react-router-dom";
 import AppHeader from "../common/AppHeader";
 import Home from "../home/Home";
+import SearchResult from "../home/SearchResult";
+import DetailPage from "../detail/DetailPage";
+import ListPage from "../list/ListPage";
+import ListHomePage from "../list/ListHomePage";
 import Login from "../user/login/Login";
 import Profile from "../user/profile/Profile";
 import OAuth2RedirectHandler from "../user/oauth2/OAuth2RedirectHandler";
@@ -15,7 +19,6 @@ import "react-s-alert/dist/s-alert-default.css";
 import "react-s-alert/dist/s-alert-css-effects/slide.css";
 import "./App.css";
 
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -25,39 +28,38 @@ class App extends Component {
       loading: true,
     };
 
-    this.loadCurrentlyLoggedInUser = this.loadCurrentlyLoggedInUser.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
   }
 
-  // loadCurrentlyLoggedInUser() {
-  //   getCurrentUser()
-  //     .then((response) => {
-  //       this.setState({
-  //         currentUser: response,
-  //         authenticated: true,
-  //         loading: false,
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       this.setState({
-  //         loading: false,
-  //       });
-  //     });
-  // }
-  async loadCurrentlyLoggedInUser() {
-    try {
-      const response = await getCurrentUser();
-      this.setState({
-        currentUser: response,
-        authenticated: true,
-        loading: false,
-      });
-    } catch (error) {
-      this.setState({
-        loading: false,
-      });
+  setCurrentUser = (user) => {
+    this.setState({
+      currentUser: user,
+      authenticated: user !== null,
+    });
+  };
+
+  loadCurrentUser = () => {
+    const token = localStorage.getItem(ACCESS_TOKEN);
+    if (!token) {
+      this.setState({ loading: false });
+      return;
     }
-  }
+
+    getCurrentUser()
+      .then((response) => {
+        this.setState({
+          currentUser: response,
+          authenticated: true,
+          loading: false,
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          loading: false,
+        });
+        console.error("Error fetching current user:", error);
+      });
+  };
 
   handleLogout() {
     localStorage.removeItem(ACCESS_TOKEN);
@@ -66,10 +68,16 @@ class App extends Component {
       currentUser: null,
     });
     Alert.success("You're safely logged out!");
+    this.props.history.push("/login");
   }
 
+  handleSearch = (searchTerm, page) => {
+    // 검색어와 페이지 정보를 업데이트합니다.
+    this.setState({ searchTerm, currentPage: page });
+  };
+
   componentDidMount() {
-    this.loadCurrentlyLoggedInUser();
+    this.loadCurrentUser();
   }
 
   render() {
@@ -88,20 +96,43 @@ class App extends Component {
         <div className="app-top-box">
           <AppHeader
             authenticated={this.state.authenticated}
+            currentUser={this.state.currentUser}
             onLogout={this.handleLogout}
+            //onSearch={this.handleSearch}
           />
         </div>
         <div className="app-body">
-          <Route exact path="/" component={Home}></Route>
-          {/* <Route exact path="/" component={Order}></Route> */}
-         
           <Switch>
-            <PrivateRoute
+            <Route exact path="/" component={Home}></Route>
+            <Route
+              exact
+              path="/search/:hashtag/:page/:order"
+              component={SearchResult}
+            ></Route>
+            <Route exact path="/detail/:postId" component={DetailPage}></Route>
+            <Route exact path="/list/home/:page" component={ListHomePage}></Route>
+            <Route
+              path="/list/:hashtag/:page"
+              render={(props) => (
+                <ListPage
+                  {...props}
+                  authenticated={this.state.authenticated}
+                  currentUser={this.state.currentUser}
+                />
+              )}
+            />
+            <Route
+              path="/profile"
+              render={(props) => (
+                <Profile {...props} currentUser={this.state.currentUser} />
+              )}
+            />
+            {/* <PrivateRoute
               path="/profile"
               authenticated={this.state.authenticated}
               currentUser={this.state.currentUser}
               component={Profile}
-            ></PrivateRoute>
+            ></PrivateRoute> */}
             <Route
               path="/login"
               render={(props) => (
@@ -110,8 +141,17 @@ class App extends Component {
             ></Route>
             <Route
               path="/oauth2/redirect"
+              render={(props) => (
+                <OAuth2RedirectHandler
+                  {...props}
+                  onLogin={this.loadCurrentUser}
+                />
+              )}
+            />
+            {/* <Route
+              path="/oauth2/redirect"
               component={OAuth2RedirectHandler}
-            ></Route>
+            ></Route> */}
             {/* <Route component={NotFound}></Route> */}
           </Switch>
         </div>
@@ -127,4 +167,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App);

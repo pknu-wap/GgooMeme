@@ -1,0 +1,25 @@
+.img-gallery {
+    display: flex;
+    justify-content: center;
+    padding-top:100px;
+    /* align-items:flex-start; */
+}
+
+.gallery-column {
+    margin: 0 20px; /* 각 열 사이의 간격 조절 */
+}
+
+.load-more{
+    text-align:center;
+    border: none;
+    background-color: #6fbdf1;
+    color: #fff;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin : 40px;
+    cursor: pointer;
+}
+
+.load-more:hover{
+    background-color: #2980b9; /* 마우스를 올렸을 때 버튼의 배경색을 변경 */
+}
