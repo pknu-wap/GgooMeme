@@ -17,7 +17,9 @@ class ListHomePage extends Component {
   };
 
   componentDidMount() {
-    this.fetchPostData(1, "random");
+    const { order } = this.props.match.params;
+    this.fetchPostData(1, order);
+    // this.fetchPostData(1, "random");
     window.addEventListener("resize", this.handleResize);
     window.addEventListener("scroll", this.handleScroll);
   }
@@ -45,10 +47,16 @@ class ListHomePage extends Component {
     }
   };
   
+  // loadMorePosts = () => {
+  //   const { page } = this.state;
+  //   this.setState({ isFetching: true });
+  //   this.fetchPostData(page + 1, "랜덤순");
+  // };
+
   loadMorePosts = () => {
-    const { page } = this.state;
+    const { page,order } = this.state;
     this.setState({ isFetching: true });
-    this.fetchPostData(page + 1, "랜덤순");
+    this.fetchPostData(page + 1, order);
   };
   
   handleResize = () => {
@@ -77,11 +85,14 @@ class ListHomePage extends Component {
   };
 
   fetchPostData(page, order) {
+    const url = `${API_BASE_URL}/post/main/${page}/${order}`;
+    console.log("Fetching data from:", url);
     request({
-      url: API_BASE_URL + `/post/main/${page}/${order}`,
+      url: url,
       method: "GET",
     })
       .then((data) => {
+        console.log("Received data:", data);
         this.setState((prevState) => {
           // Set을 이용해 중복된 postId를 제거
           const uniquePosts = [
@@ -111,7 +122,6 @@ class ListHomePage extends Component {
         });
       });
   }
-  
 
   // 이미지 클릭 시 상세 페이지로 이동하는 함수
   handleImageClick = (postId) => {
