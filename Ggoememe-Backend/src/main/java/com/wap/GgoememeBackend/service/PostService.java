@@ -1,9 +1,6 @@
 package com.wap.GgoememeBackend.service;
 
-import com.wap.GgoememeBackend.domain.CachedPost;
-import com.wap.GgoememeBackend.domain.Post;
-import com.wap.GgoememeBackend.domain.PostBookmarkedUser;
-import com.wap.GgoememeBackend.domain.User;
+import com.wap.GgoememeBackend.domain.*;
 import com.wap.GgoememeBackend.payload.PostDto;
 import com.wap.GgoememeBackend.payload.PostPreviewDtos;
 import com.wap.GgoememeBackend.payload.response.post.MainPostResponse;
@@ -11,6 +8,7 @@ import com.wap.GgoememeBackend.payload.response.post.RelatedPostResponse;
 import com.wap.GgoememeBackend.payload.response.post.SearchPostResponse;
 import com.wap.GgoememeBackend.repository.mongo.PostRepository;
 import com.wap.GgoememeBackend.repository.mysql.PostBookmarkedUserRepository;
+import com.wap.GgoememeBackend.repository.mysql.ReplyRepository;
 import com.wap.GgoememeBackend.repository.mysql.UserRepository;
 import com.wap.GgoememeBackend.security.UserPrincipal;
 import org.springframework.cache.annotation.Cacheable;
@@ -24,20 +22,21 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final ReplyRepository replyRepository;
     private final PostBookmarkedUserRepository postBookmarkedUserRepository;
-
-
     private final MongoTemplate mongoTemplate;
 
-    public PostService(PostRepository postRepository, UserRepository userRepository, PostBookmarkedUserRepository postBookmarkedUserRepository, MongoTemplate mongoTemplate) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, ReplyRepository replyRepository, PostBookmarkedUserRepository postBookmarkedUserRepository, MongoTemplate mongoTemplate) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.replyRepository = replyRepository;
         this.postBookmarkedUserRepository = postBookmarkedUserRepository;
         this.mongoTemplate = mongoTemplate;
     }
@@ -124,23 +123,30 @@ public class PostService {
     @Cacheable(cacheNames = "replyMainPosts", key = "#root.target + #root.methodName + #page", sync = true, cacheManager = "rcm")
     public MainPostResponse replyMainPosts(int page) {
         int pageSize = 20;
-        PageRequest pageRequest = PageRequest.of(page - 1, pageSize, Sort.by("replies.size").descending());
-        Page<Post> pageOfPosts = postRepository.findAll(pageRequest);
+        PageRequest pageRequest = PageRequest.of(page - 1, pageSize);
 
-        List<Post> posts = pageOfPosts.getContent();
-        boolean hasNext = pageOfPosts.hasNext();
+        Page<Object[]>  postWithReplyCountPage = replyRepository.findPostIdsByReplyDesc(pageRequest);
+        List<String> postIds = postWithReplyCountPage.stream()
+                .map(objects -> String.valueOf(objects[0]))
+                .collect(Collectors.toList());
 
-        PostPreviewDtos postPreviewDtos = PostPreviewDtos.of(posts);
+        List<Post> posts = postRepository.findAllById(postIds);
 
-        return new MainPostResponse(hasNext, postPreviewDtos);
+        return new MainPostResponse(postWithReplyCountPage.hasNext(), PostPreviewDtos.of(posts));
     }
 
     @Cacheable(cacheNames = "bookmarkMainPosts", key = "#root.target + #root.methodName + #page", sync = true, cacheManager = "rcm")
     public MainPostResponse bookmarkMainPosts(int page) {
         int pageSize = 20;
-        PageRequest pageRequest = PageRequest.of(page - 1, pageSize, Sort.by("bookmarkedUsers.size()").descending());
-        Page<Post> pageOfPosts = postRepository.findAll(pageRequest);
+        PageRequest pageRequest = PageRequest.of(page - 1, pageSize);
 
-        return new MainPostResponse(pageOfPosts.hasNext(), PostPreviewDtos.of(pageOfPosts.getContent()));
+        Page<Object[]> postWithBookmarkCountPage = postBookmarkedUserRepository.findAllOrderByPostIdCountDesc(pageRequest);
+        List<String> postIds = postWithBookmarkCountPage.stream()
+                .map(objects -> String.valueOf(objects[0]))
+                .collect(Collectors.toList());
+
+        List<Post> posts = postRepository.findAllById(postIds);
+
+        return new MainPostResponse(postWithBookmarkCountPage.hasNext(), PostPreviewDtos.of(posts));
     }
 }
