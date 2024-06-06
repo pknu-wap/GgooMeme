@@ -123,9 +123,9 @@
 
 .gallery {
     display: flex;
+    justify-content: space-between;
     justify-content: center;
     padding-top:20px;
-    /* align-items:flex-start; */
 }
 
 .gallery-column {
@@ -137,6 +137,7 @@
     list-style-type: none;
     margin-bottom: 20px; /* 각 아이템 사이의 간격 조절 */
     transition: transform 0.3s ease;
+    padding: 5px;
 }
 
 .gallery-item:hover {
@@ -148,7 +149,6 @@
     height: auto;
     border-radius: 5px;
     object-fit: cover;
-    /* padding: 5px; */
 }
 
 .load-more, .load-back{

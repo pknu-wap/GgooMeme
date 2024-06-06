@@ -46,14 +46,9 @@ class ListHomePage extends Component {
   };
   
   loadMorePosts = () => {
-    const { hashtag, page } = this.state;
+    const { page } = this.state;
     this.setState({ isFetching: true });
     this.fetchPostData(page + 1, "랜덤순");
-    // if (hashtag) {
-    //   this.fetchImagesByHashtags(hashtag, page + 1);
-    // } else {
-    //   this.fetchPostData(page + 1, "랜덤순");
-    // }
   };
   
   handleResize = () => {

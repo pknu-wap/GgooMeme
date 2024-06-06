@@ -27,17 +27,31 @@ class AppHeader extends Component {
     }
   }
 
+  // updateSearchTerm() {
+  //   const currentPath = this.props.location.pathname;
+  //   if (currentPath.includes("/list/")) {
+  //     const parts = currentPath.split("/");
+  //     this.setState({
+  //       searchTerm: parts[2],
+  //       page: parts[3],
+  //     });
+  //   } else if (currentPath === "/home") {
+  //     this.setState({ searchTerm: "", page: 1 });
+  //   }
+  // }
+
   updateSearchTerm() {
     const currentPath = this.props.location.pathname;
-    if (currentPath.includes("/list/")) {
+    if (currentPath.includes("/list/home")) {
+      this.setState({ searchTerm: "", page: 1 });
+    }
+    else if (currentPath.includes("/list/")) {
       const parts = currentPath.split("/");
       this.setState({
         searchTerm: parts[2],
         page: parts[3],
       });
-    } else if (currentPath === "/home") {
-      this.setState({ searchTerm: "", page: 1 });
-    }
+    } 
   }
 
   handleInputChange = (event) => {

@@ -120,6 +120,7 @@
 
 .image-list {
     display: flex;
+    /* justify-content: space-between; */
     transition: transform 0.3s ease-in-out; /* 부드러운 슬라이드 효과 */
     width: calc(20% * 5);
 }

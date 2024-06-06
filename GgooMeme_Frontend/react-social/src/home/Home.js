@@ -285,18 +285,18 @@ class Home extends Component {
               <div className="tag-container">
                 <div
                   className="tag-box"
-                  onClick={() => this.handleTagClick("ppt")}
-                >
-                  <a className="tag-name">
-                    <span>ppt</span>
-                  </a>
-                </div>
-                <div
-                  className="tag-box"
                   onClick={() => this.handleTagClick("사람")}
                 >
                   <a className="tag-name">
                     <span>사람</span>
+                  </a>
+                </div>
+                <div
+                  className="tag-box"
+                  onClick={() => this.handleTagClick("ppt")}
+                >
+                  <a className="tag-name">
+                    <span>ppt</span>
                   </a>
                 </div>
                 <div
@@ -309,10 +309,10 @@ class Home extends Component {
                 </div>
                 <div
                   className="tag-box"
-                  onClick={() => this.handleTagClick("식물")}
+                  onClick={() => this.handleTagClick("축하")}
                 >
                   <a className="tag-name">
-                    <span>식물</span>
+                    <span>축하</span>
                   </a>
                 </div>
                 <div
