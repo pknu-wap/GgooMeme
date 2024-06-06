@@ -223,7 +223,8 @@ class Home extends Component {
       this.props.history.push(`/list/${hashtag}/${page}`);
     } else {
       this.fetchPostData(page, order);
-      this.props.history.push(`/list/home/${page}`);
+      //this.props.history.push(`/list/home/${page}`);
+      this.props.history.push(`/list/home/${page}/${order}`);
     }
     //this.props.history.push(`/list/${hashtag}/${page+1}`);
   }

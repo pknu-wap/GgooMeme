@@ -110,7 +110,8 @@ class App extends Component {
               component={SearchResult}
             ></Route>
             <Route exact path="/detail/:postId" component={DetailPage}></Route>
-            <Route exact path="/list/home/:page" component={ListHomePage}></Route>
+            {/* <Route exact path="/list/home/:page" component={ListHomePage}></Route> */}
+            <Route exact path="/list/home/:page/:order" component={ListHomePage}></Route>
             <Route
               path="/list/:hashtag/:page"
               render={(props) => (
