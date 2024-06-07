@@ -34,7 +34,6 @@ class Home extends Component {
     const page = parseInt(urlParams.get("page")) || 1;
     const hashtag = urlParams.get("hashtag") || "";
     const order = urlParams.get("order") || "random";
-    // const {page, order} = this.state;
 
     this.setState({ page, hashtag, order }, () => {
       if (hashtag) {
@@ -201,9 +200,11 @@ class Home extends Component {
   };
 
   handleTagClick = (tag) => {
+    const order = this.props.match.params;
     this.setState({ hashtag: tag, page: 1 }, () => {
       this.fetchImagesByHashtags(tag, 1);
-      this.pushHistory(1, tag, this.state.order);
+      //this.pushHistory(1, tag, this.state.order);
+      this.pushHistory(1, tag, order);
     });
   };
   

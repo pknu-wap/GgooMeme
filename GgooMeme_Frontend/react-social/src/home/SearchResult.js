@@ -9,7 +9,7 @@ class SearchResult extends Component {
 
     return (
       <div>
-        <Home hashtag={hashtag} page={page} />
+        <Home hashtag={hashtag} page={page} order={order}/>
       </div>
     );
   }
