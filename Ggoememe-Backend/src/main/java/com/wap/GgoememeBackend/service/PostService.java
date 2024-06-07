@@ -132,6 +132,15 @@ public class PostService {
 
         List<Post> posts = postRepository.findAllById(postIds);
 
+        List<Post> result = new ArrayList<>();
+        for(String postId : postIds){
+            for(Post post : posts){
+                if(postId.equals(post.getId())){
+                    result.add(post);
+                }
+            }
+        }
+
         return new MainPostResponse(postWithReplyCountPage.hasNext(), PostPreviewDtos.of(posts));
     }
 
@@ -147,6 +156,15 @@ public class PostService {
 
         List<Post> posts = postRepository.findAllById(postIds);
 
-        return new MainPostResponse(postWithBookmarkCountPage.hasNext(), PostPreviewDtos.of(posts));
+        List<Post> result = new ArrayList<>();
+        for(String postId : postIds){
+            for(Post post : posts){
+                if(postId.equals(post.getId())){
+                    result.add(post);
+                }
+            }
+        }
+
+        return new MainPostResponse(postWithBookmarkCountPage.hasNext(), PostPreviewDtos.of(result));
     }
 }
