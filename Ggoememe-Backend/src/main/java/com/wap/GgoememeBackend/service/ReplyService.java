@@ -26,7 +26,7 @@ public class ReplyService {
         this.replyRepository = replyRepository;
     }
 
-    @Cacheable(cacheNames = "findByPostId", key = "#root.target + #root.methodName+ #postId +#page", sync = true, cacheManager = "rcm")
+//    @Cacheable(cacheNames = "findByPostId", key = "#root.target + #root.methodName+ #postId +#page", sync = true, cacheManager = "rcm")
     public ReplyResponse findByPostId(String postId, int page) throws RuntimeException{
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NoSuchElementException("no post"));
