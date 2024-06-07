@@ -88,7 +88,6 @@ class DetailPage extends Component {
       .then(() => {
         this.fetchReplies();
         this.setState({ replyContent: "" });
-        //this.fetchReplies(); // 댓글 작성 후 댓글 목록 갱신
       })
       .catch((error) => {
         this.setState({
@@ -100,6 +99,13 @@ class DetailPage extends Component {
 
   handleReplyChange = (event) => {
     this.setState({ replyContent: event.target.value });
+  };
+
+  handleReplyKeyDown = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      this.submitReply();
+    }
   };
 
   fetchPostInfo = () => {
@@ -283,6 +289,7 @@ class DetailPage extends Component {
                   className="reply-box"
                   value={replyContent}
                   onChange={this.handleReplyChange}
+                  onKeyDown={this.handleReplyKeyDown}
                   placeholder="댓글을 작성하세요..."
                 />
                 <button
