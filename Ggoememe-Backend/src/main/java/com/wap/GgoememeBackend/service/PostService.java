@@ -141,7 +141,7 @@ public class PostService {
             }
         }
 
-        return new MainPostResponse(postWithReplyCountPage.hasNext(), PostPreviewDtos.of(posts));
+        return new MainPostResponse(postWithReplyCountPage.hasNext(), PostPreviewDtos.of(result));
     }
 
     @Cacheable(cacheNames = "bookmarkMainPosts", key = "#root.target + #root.methodName + #page", sync = true, cacheManager = "rcm")
