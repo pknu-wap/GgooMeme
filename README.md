@@ -14,6 +14,16 @@
 
 ## Backend
 ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
-![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
-![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)
 ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
+<img src="https://img.shields.io/badge/apachejmeter-D22128?style=for-the-badge&logo=apachejmeter&logoColor=white"> 
+<img src="https://img.shields.io/badge/mariadb-003545?style=for-the-badge&logo=mariadb&logoColor=white"> 
+<img src="https://img.shields.io/badge/mongodb-47A248?style=for-the-badge&logo=mongodb&logoColor=white"> 
+<img src="https://img.shields.io/badge/mongodb-47A248?style=for-the-badge&logo=mongodb&logoColor=white"> 
+
+# 구조도
+![image](https://github.com/user-attachments/assets/4c2c9059-edf0-4ceb-a5a9-a6b8c048a515)
+
+- AWS의 LoadBalancer를 사용하여 2대의 인스턴스에 트래픽을 분산시킴
+- 특정 api의 데이터 접근로에 레디스를 활용한 캐싱 적용
+- 한 서버에서 2개의 DB에 접근하여 데이터 관리 안정성 및 효율성 증가
+
